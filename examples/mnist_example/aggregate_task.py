@@ -12,12 +12,15 @@ class AggregateTask(Task):
         self.parameters = []
 
     def load(self) -> None:
+        # Nothing to do
+        pass
+
+    def train(self) -> None:
         for t in self.tasks:
             task: Task = t
             path = os.path.join(task.workdir, "parameter.pth")
             self.parameters.append(torch.load(path, map_location=self.device))
 
-    def train(self) -> None:
         avg_parameter = self.parameters[0]
         for key in avg_parameter.keys():
             for i in range(1, len(self.parameters)):

@@ -1,6 +1,6 @@
-title: Your project name
+title: Fedflow
 lang: en
-description: a catchy description for your project
+description: auto-scheduler for pytorch task.
 
 remote_theme: rundocs/jekyll-rtd-theme
 
