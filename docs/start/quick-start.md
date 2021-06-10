@@ -1,8 +1,8 @@
-# Fedflow
+---
+sort: 2
+---
 
-## Install
-
-`pip instal fedflow`
+# Quick Start 
 
 ## Usage
 
@@ -87,4 +87,3 @@ if __name__ == "__main__":
 
     FedFlow.start()
 ```
-
