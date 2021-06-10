@@ -33,9 +33,9 @@ task:
 scheduler:  # some task scheduler parameters
   default-memory: '2GB'
   default-cuda-memory: '2GB'
-  auto-adjust: true
-  max-waiting: 0
-  max-process: 0
+  auto-adjust: false
+  max-waiting: 10
+  max-process: 20
   interval: 60  # seconds
   load-nretry: 3
   train-nretry: 3
@@ -49,6 +49,3 @@ smtp:
   receiver: 'user@smtp.example.com'
   min-interval: 3600 # seconds
   max-numbers: 10
-
-log:
-  scheduler: 111

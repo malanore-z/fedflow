@@ -1,7 +1,6 @@
 LICENSE
 README.md
-pyproject.toml
-setup.cfg
+setup.py
 src/fedflow/__init__.py
 src/fedflow/__main__.py
 src/fedflow/config.py
@@ -22,6 +21,8 @@ src/fedflow/mail/__init__.py
 src/fedflow/mail/mail.py
 src/fedflow/mail/send_mail.py
 src/fedflow/mail/templates.py
+src/fedflow/resources/config.yaml
+src/fedflow/resources/logging.yaml
 src/fedflow/utils/__init__.py
 src/fedflow/utils/module_utils.py
 src/fedflow/utils/trainer/__init__.py
