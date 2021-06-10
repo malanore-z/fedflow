@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: fedflow
+Version: 0.2.0b0
+Summary: auto-scheduler for pytorch task.
+Home-page: https://github.com/malanore-z/fedflow
+Author: malanore
+Author-email: malanore.z@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/malanore-z/fedflow/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.4
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Fed Flow
+
+## Description
+
+auto-scheduler for pytorch task.
+
+## Install
+`pip install fedflow`
+
+

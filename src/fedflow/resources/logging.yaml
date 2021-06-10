@@ -1,0 +1,62 @@
+version: 1
+formatters:
+  common:
+    format: '%(asctime)s %(name)20s [%(levelname)-8s] %(message)s'
+  scheduler:
+    format: '%(asctime)s [%(levelname)-8s] %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: common
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler
+    level: INFO
+    filename: 'logs/root.log'
+    formatter: common
+  scheduler:
+    class: logging.FileHandler
+    level: INFO
+    filename: 'logs/scheduler.log'
+    formatter: scheduler
+  task:
+    class: logging.FileHandler
+    level: INFO
+    filename: 'logs/task.log'
+    formatter: common
+  taskMain:
+    class: logging.FileHandler
+    level: WARN
+    filename: 'logs/task-main.log'
+    formatter: common
+  taskSub:
+    class: logging.FileHandler
+    level: WARN
+    filename: 'logs/task-sub.log'
+    formatter: common
+
+loggers:
+  fedflow:
+    level: INFO
+    handlers: [console, file]
+    propagate: no
+  fedflow.scheduler:
+    level: INFO
+    handlers: [console, scheduler]
+    propagate: no
+  fedflow.task:
+    level: INFO
+    handlers: [task]
+    propagate: no
+  fedflow.task.main:
+    level: INFO
+    handlers: [taskMain]
+    propagate: yes
+  fedflow.task.sub:
+    level: INFO
+    handlers: [taskSub]
+    propagate: yes
+root:
+  level: INFO
+  handlers: [console, file]

@@ -1,0 +1,1 @@
+from fedflow.utils.trainer.supervised_trainer import SupervisedTrainer
