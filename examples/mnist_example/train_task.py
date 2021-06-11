@@ -30,7 +30,7 @@ class TrainTask(Task):
 
     def train(self) -> None:
         if self.pre_aggregate_task is not None:
-            init_model_path = os.path.join(self.pre_aggregate_task.workdir, "parameter.pth")
+            init_model_path = os.path.join(self.pre_aggregate_task.workdir, "aggregate.pth")
         else:
             init_model_path = None
         trainer = SupervisedTrainer(self.mnist_model, self.mnist_optim, self.criterion, epoch=40, device=self.device,
