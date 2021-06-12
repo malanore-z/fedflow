@@ -12,7 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../src"))
+absdir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(absdir, "../../src"))
 
 
 # -- Project information -----------------------------------------------------
@@ -82,4 +83,7 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['_static', 'CNAME']
+
+html_favicon = os.path.join(absdir, "Rope.ico")
+html_extra_path = [os.path.join(absdir, "CNAME"), ]

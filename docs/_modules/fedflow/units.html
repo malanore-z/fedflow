@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fedflow.units &mdash; Fedflow 0.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/Rope.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Fedflow
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">示例</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fedflow.html">fedflow package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../core.html">fedflow.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mail.html">fedflow.mail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils.html">fedflow.utils package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fedflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fedflow.units</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fedflow.units</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Units APIs</span>
+<span class="sd">===========</span>
+<span class="sd">some apis for units convert.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Units&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ByteUnits&quot;</span>
+<span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">abc</span>
+
+
+<div class="viewcode-block" id="Units"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units">[docs]</a><span class="k">class</span> <span class="nc">Units</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The basic class of all units</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Units.convert"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.convert">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_from</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        convert value from unit &#39;_from&#39; to unit &#39;_to&#39;</span>
+
+<span class="sd">        :param _from: the instance of ``Units``</span>
+<span class="sd">        :param _to: the instance of ``Units``</span>
+<span class="sd">        :param _value: a number value</span>
+<span class="sd">        :return: a number value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Units.parse"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.parse">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        parse str value</span>
+
+<span class="sd">        :param s: value</span>
+<span class="sd">        :return: a tuple consist of value and units, (value, units)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Units.to_string"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.to_string">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a str value</span>
+
+<span class="sd">        :param _value: a number value</span>
+<span class="sd">        :return: a str value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Units.from_units"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.from_units">[docs]</a>    <span class="k">def</span> <span class="nf">from_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_from</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">_from</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Units.to_units"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.to_units">[docs]</a>    <span class="k">def</span> <span class="nf">to_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ByteUnits"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits">[docs]</a><span class="k">class</span> <span class="nc">ByteUnits</span><span class="p">(</span><span class="n">Units</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An units class used for handling byte convert</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PREFIX_SEQUENCE</span> <span class="o">=</span> <span class="s2">&quot;-KMGTPEZY&quot;</span>
+
+<div class="viewcode-block" id="ByteUnits.__init__"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">is_binary</span><span class="p">,</span> <span class="n">is_byte</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ByteUnits</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_binary</span> <span class="o">=</span> <span class="n">is_binary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_byte</span> <span class="o">=</span> <span class="n">is_byte</span></div>
+
+<div class="viewcode-block" id="ByteUnits.convert"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits.convert">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_from</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">_from</span><span class="o">.</span><span class="n">is_binary</span> <span class="o">!=</span> <span class="n">_to</span><span class="o">.</span><span class="n">is_binary</span> <span class="ow">or</span> <span class="n">_from</span><span class="o">.</span><span class="n">is_byte</span> <span class="o">!=</span> <span class="n">_to</span><span class="o">.</span><span class="n">is_byte</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;_from and _to must have the same units format.&quot;</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">_to</span><span class="o">.</span><span class="n">prefix</span> <span class="o">-</span> <span class="n">_from</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="n">co</span> <span class="o">=</span> <span class="mi">1024</span> <span class="k">if</span> <span class="n">_from</span><span class="o">.</span><span class="n">is_binary</span> <span class="k">else</span> <span class="mi">1000</span>
+        <span class="k">while</span> <span class="n">dist</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">_value</span> <span class="o">=</span> <span class="n">_value</span> <span class="o">*</span> <span class="n">co</span>
+                <span class="n">dist</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_value</span> <span class="o">=</span> <span class="n">_value</span> <span class="o">/</span> <span class="n">co</span>
+                <span class="n">dist</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">_value</span></div>
+
+<div class="viewcode-block" id="ByteUnits.parse"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits.parse">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;s cannot be None&quot;</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ByteUnits</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">ByteUnits</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">is_byte</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">is_byte</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Illegal unit: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span>
+
+        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">is_binary</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">is_binary</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Illegal unit: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="n">prefix</span> <span class="o">=</span> <span class="n">ByteUnits</span><span class="o">.</span><span class="n">PREFIX_SEQUENCE</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="n">pos</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+            <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">units</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">units</span><span class="o">.</span><span class="n">is_binary</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Illegal unit: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">s</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span>
+
+        <span class="n">value_s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="p">(</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value_s</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_s</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">units</span></div>
+
+<div class="viewcode-block" id="ByteUnits.to_string"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits.to_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">units_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">ByteUnits</span><span class="o">.</span><span class="n">PREFIX_SEQUENCE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">],</span>
+            <span class="s2">&quot;i&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_binary</span> <span class="k">else</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;B&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_byte</span> <span class="k">else</span> <span class="s2">&quot;b&quot;</span>
+        <span class="p">)</span>
+        <span class="n">units_str</span> <span class="o">=</span> <span class="n">units_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">units_str</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_value</span><span class="p">)</span> <span class="o">+</span> <span class="n">units_str</span></div></div>
+
+
+<span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ByteUnits</span><span class="o">.</span><span class="n">PREFIX_SEQUENCE</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">is_binary</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">is_byte</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="n">ByteUnits</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">is_binary</span><span class="p">,</span> <span class="n">is_byte</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">ByteUnits</span><span class="p">,</span> <span class="n">units</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span> <span class="n">units</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, malanore.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
