@@ -1,3 +1,12 @@
+"""
+TaskGroup
+==========
+"""
+
+__all__ = [
+    "TaskGroup"
+]
+
 import json
 import random
 from typing import Union
@@ -87,9 +96,10 @@ class TaskGroup(object):
         Move task from one container to other container.
         An exception will be threw if task not exists in _from container.
         This method will update the status of task after successfully moved.
-        :param task_id:
-        :param _from:
-        :param _to:
+
+        :param task_id: the id of task
+        :param _from: the status move from
+        :param _to: the status move to
         :return:
         """
         if task_id not in self.tasks[_from]:

@@ -1,3 +1,12 @@
+"""
+Mail Entry
+============
+"""
+
+__all__ = [
+    "Mail"
+]
+
 import logging
 import os
 from email.mime.text import MIMEText

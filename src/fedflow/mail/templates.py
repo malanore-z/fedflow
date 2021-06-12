@@ -1,3 +1,12 @@
+"""
+Templates for reporting
+=========================
+"""
+
+__all__ = [
+    "group_template"
+]
+
 
 group_html = """<div style="width: 80%%; margin-left: 10%%">
     <h3>Group %s Finished</h3>

@@ -1,3 +1,13 @@
+"""
+Config APIs
+===========
+"""
+
+__all__ = [
+    "Config"
+]
+
+
 import os
 import shutil
 
@@ -7,19 +17,19 @@ import yaml
 class Config(object):
 
     # Parameters that can be modified at run time
-    props = {}
+    __props = {}
     # Parameters that are read from a configuration file and cannot be changed at run time
-    readonly_props = {}
+    __readonly_props = {}
 
     @classmethod
     def load(cls, path=None):
         if path is None:
             path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "config.yaml")
             with open(path) as f:
-                cls.readonly_props = yaml.load(f, Loader=yaml.SafeLoader)
+                cls.__readonly_props = yaml.load(f, Loader=yaml.SafeLoader)
         else:
             with open(path) as f:
-                cls.props = yaml.load(f, Loader=yaml.SafeLoader)
+                cls.__props = yaml.load(f, Loader=yaml.SafeLoader)
         workdir: str = cls.get_property("workdir")
         if workdir is not None:
             workdir = os.path.abspath(workdir)
@@ -34,7 +44,7 @@ class Config(object):
 
     @classmethod
     def set_config(cls, d: dict):
-        cls.props = d.copy()
+        cls.__props = d.copy()
 
     @classmethod
     def get_property(cls, key, default=None):
@@ -44,12 +54,12 @@ class Config(object):
         :param key: a string of the key to get the value
         :param default: return value if key not found
         """
-        op_res, val = cls.__get_from_dict(cls.props,
-                                                   cls.__split_key(key),
-                                                   default)
+        op_res, val = cls.__get_from_dict(cls.__props,
+                                          cls.__split_key(key),
+                                          default)
         if op_res:
             return val
-        return cls.__get_from_dict(cls.readonly_props,
+        return cls.__get_from_dict(cls.__readonly_props,
                                    cls.__split_key(key),
                                    default)[1]
 
@@ -62,7 +72,7 @@ class Config(object):
         :param value:
         :return:
         """
-        cls.__set_to_dict(cls.props, cls.__split_key(key), value)
+        cls.__set_to_dict(cls.__props, cls.__split_key(key), value)
 
     @classmethod
     def __split_key(cls, key: str):

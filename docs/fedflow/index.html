@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>fedflow package &mdash; Fedflow 0.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="fedflow.core package" href="../core/" />
+    <link rel="prev" title="Examples" href="../example/" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../" class="icon icon-home"> Fedflow
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">介绍</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../start/">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">示例</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../example/">Examples</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fedflow package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#config-apis">Config APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context-apis">Context APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#units-apis">Units APIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../core/">fedflow.core package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mail/">fedflow.mail package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/">fedflow.utils package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Fedflow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>fedflow package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/fedflow.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-fedflow">
+<span id="fedflow-package"></span><h1>fedflow package<a class="headerlink" href="#module-fedflow" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.FedFlow">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.</span></span><span class="sig-name descname"><span class="pre">FedFlow</span></span><a class="reference internal" href="../_modules/fedflow/fedflow/#FedFlow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.FedFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The entry class of Fedflow</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.FedFlow.groups">
+<span class="sig-name descname"><span class="pre">groups</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[]</span></em><a class="headerlink" href="#fedflow.FedFlow.groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.FedFlow.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/fedflow/#FedFlow.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.FedFlow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.FedFlow.add_group">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">add_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../core/#fedflow.core.taskgroup.TaskGroup" title="fedflow.core.taskgroup.TaskGroup"><span class="pre">fedflow.core.taskgroup.TaskGroup</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/fedflow/#FedFlow.add_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.FedFlow.add_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a task group to flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.FedFlow.start">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/fedflow/#FedFlow.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.FedFlow.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start schedule tasks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-fedflow.config"></span><div class="section" id="config-apis">
+<h2>Config APIs<a class="headerlink" href="#config-apis" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.config.Config">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../_modules/fedflow/config/#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.config.Config.load">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/config/#Config.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.config.Config.generate_config">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">generate_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/config/#Config.generate_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config.generate_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.config.Config.set_config">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">set_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/config/#Config.set_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config.set_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.config.Config.get_property">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/config/#Config.get_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config.get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value of readonly parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – a string of the key to get the value</p></li>
+<li><p><strong>default</strong> – return value if key not found</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.config.Config.set_property">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/config/#Config.set_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.config.Config.set_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set parameters at run time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – </p></li>
+<li><p><strong>value</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-fedflow.context"></span><div class="section" id="context-apis">
+<h2>Context APIs<a class="headerlink" href="#context-apis" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.context.WorkDirContext">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.context.</span></span><span class="sig-name descname"><span class="pre">WorkDirContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/context/#WorkDirContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.context.WorkDirContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Temporarily modify the work directory</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.context.WorkDirContext.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/context/#WorkDirContext.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.context.WorkDirContext.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-fedflow.units"></span><div class="section" id="units-apis">
+<h2>Units APIs<a class="headerlink" href="#units-apis" title="Permalink to this headline">¶</a></h2>
+<p>some apis for units convert.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.units.Units">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.units.</span></span><span class="sig-name descname"><span class="pre">Units</span></span><a class="reference internal" href="../_modules/fedflow/units/#Units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The basic class of all units</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.Units.convert">
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#Units.convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert value from unit ‘_from’ to unit ‘_to’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_from</strong> – the instance of <code class="docutils literal notranslate"><span class="pre">Units</span></code></p></li>
+<li><p><strong>_to</strong> – the instance of <code class="docutils literal notranslate"><span class="pre">Units</span></code></p></li>
+<li><p><strong>_value</strong> – a number value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a number value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.Units.parse">
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#Units.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse str value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> – value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple consist of value and units, (value, units)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.Units.to_string">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/fedflow/units/#Units.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a str value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_value</strong> – a number value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a str value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.Units.from_units">
+<span class="sig-name descname"><span class="pre">from_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#Units.from_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units.from_units" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.Units.to_units">
+<span class="sig-name descname"><span class="pre">to_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#Units.to_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.Units.to_units" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.units.</span></span><span class="sig-name descname"><span class="pre">ByteUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_byte</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#ByteUnits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.ByteUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fedflow.units.Units" title="fedflow.units.Units"><code class="xref py py-class docutils literal notranslate"><span class="pre">fedflow.units.Units</span></code></a></p>
+<p>An units class used for handling byte convert</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.PREFIX_SEQUENCE">
+<span class="sig-name descname"><span class="pre">PREFIX_SEQUENCE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'-KMGTPEZY'</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.PREFIX_SEQUENCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_byte</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#ByteUnits.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.ByteUnits.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.convert">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#ByteUnits.convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.ByteUnits.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert value from unit ‘_from’ to unit ‘_to’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_from</strong> – the instance of <code class="docutils literal notranslate"><span class="pre">Units</span></code></p></li>
+<li><p><strong>_to</strong> – the instance of <code class="docutils literal notranslate"><span class="pre">Units</span></code></p></li>
+<li><p><strong>_value</strong> – a number value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a number value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.parse">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fedflow/units/#ByteUnits.parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.ByteUnits.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse str value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>s</strong> – value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple consist of value and units, (value, units)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="../_modules/fedflow/units/#ByteUnits.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.units.ByteUnits.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a str value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_value</strong> – a number value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a str value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.B">
+<span class="sig-name descname"><span class="pre">B</span></span><em class="property"> <span class="pre">=</span> <span class="pre">B</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.B" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.EB">
+<span class="sig-name descname"><span class="pre">EB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">EB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.EB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Eb">
+<span class="sig-name descname"><span class="pre">Eb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Eb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Eb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.EiB">
+<span class="sig-name descname"><span class="pre">EiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">EiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.EiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Eib">
+<span class="sig-name descname"><span class="pre">Eib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Eib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Eib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.GB">
+<span class="sig-name descname"><span class="pre">GB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">GB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.GB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Gb">
+<span class="sig-name descname"><span class="pre">Gb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Gb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Gb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.GiB">
+<span class="sig-name descname"><span class="pre">GiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">GiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.GiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Gib">
+<span class="sig-name descname"><span class="pre">Gib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Gib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Gib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.KB">
+<span class="sig-name descname"><span class="pre">KB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">KB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.KB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Kb">
+<span class="sig-name descname"><span class="pre">Kb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Kb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Kb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.KiB">
+<span class="sig-name descname"><span class="pre">KiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">KiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.KiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Kib">
+<span class="sig-name descname"><span class="pre">Kib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Kib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Kib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.MB">
+<span class="sig-name descname"><span class="pre">MB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">MB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.MB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Mb">
+<span class="sig-name descname"><span class="pre">Mb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Mb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Mb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.MiB">
+<span class="sig-name descname"><span class="pre">MiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">MiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.MiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Mib">
+<span class="sig-name descname"><span class="pre">Mib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Mib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Mib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.PB">
+<span class="sig-name descname"><span class="pre">PB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">PB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.PB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Pb">
+<span class="sig-name descname"><span class="pre">Pb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Pb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Pb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.PiB">
+<span class="sig-name descname"><span class="pre">PiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">PiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.PiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Pib">
+<span class="sig-name descname"><span class="pre">Pib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Pib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Pib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.TB">
+<span class="sig-name descname"><span class="pre">TB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">TB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.TB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Tb">
+<span class="sig-name descname"><span class="pre">Tb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Tb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Tb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.TiB">
+<span class="sig-name descname"><span class="pre">TiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">TiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.TiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Tib">
+<span class="sig-name descname"><span class="pre">Tib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Tib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Tib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.YB">
+<span class="sig-name descname"><span class="pre">YB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">YB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.YB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Yb">
+<span class="sig-name descname"><span class="pre">Yb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Yb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Yb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.YiB">
+<span class="sig-name descname"><span class="pre">YiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">YiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.YiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Yib">
+<span class="sig-name descname"><span class="pre">Yib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Yib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Yib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.ZB">
+<span class="sig-name descname"><span class="pre">ZB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ZB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.ZB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Zb">
+<span class="sig-name descname"><span class="pre">Zb</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Zb</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Zb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.ZiB">
+<span class="sig-name descname"><span class="pre">ZiB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ZiB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.ZiB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.Zib">
+<span class="sig-name descname"><span class="pre">Zib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Zib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.Zib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.b">
+<span class="sig-name descname"><span class="pre">b</span></span><em class="property"> <span class="pre">=</span> <span class="pre">b</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.b" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.iB">
+<span class="sig-name descname"><span class="pre">iB</span></span><em class="property"> <span class="pre">=</span> <span class="pre">iB</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.iB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fedflow.units.ByteUnits.ib">
+<span class="sig-name descname"><span class="pre">ib</span></span><em class="property"> <span class="pre">=</span> <span class="pre">ib</span></em><a class="headerlink" href="#fedflow.units.ByteUnits.ib" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../core/" class="btn btn-neutral float-right" title="fedflow.core package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../example/" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, malanore.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

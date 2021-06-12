@@ -1,3 +1,7 @@
+__all__ = [
+    "SupervisedTrainer"
+]
+
 import os
 import json
 import sys

@@ -1,3 +1,12 @@
+"""
+Send mail core method
+======================
+"""
+
+__all__ = [
+    "send_mail"
+]
+
 import getpass
 import smtplib
 from email.mime.text import MIMEText

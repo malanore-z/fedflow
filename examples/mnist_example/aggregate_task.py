@@ -27,3 +27,4 @@ class AggregateTask(Task):
                 avg_parameter[key] += self.parameters[i][key]
             avg_parameter[key] = torch.div(avg_parameter[key], len(self.parameters))
         torch.save(avg_parameter, "aggregate.pth")
+

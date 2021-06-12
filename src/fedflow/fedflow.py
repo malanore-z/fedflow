@@ -1,3 +1,8 @@
+__all__ = [
+    "FedFlow"
+]
+
+
 import os
 
 from fedflow.config import Config
@@ -9,6 +14,10 @@ from fedflow.core.taskgroup import TaskGroup
 
 class FedFlow(object):
 
+    """
+    The entry class of Fedflow
+    """
+
     groups = []
 
     def __init__(self):
@@ -16,11 +25,22 @@ class FedFlow(object):
 
     @classmethod
     def add_group(cls, group: TaskGroup):
+        """
+        Add a task group to flow.
+
+        :param group:
+        :return:
+        """
         cls.groups.append(group)
         group.index = len(cls.groups)
 
     @classmethod
     def start(cls):
+        """
+        Start schedule tasks
+
+        :return:
+        """
         workdir = Config.get_property("workdir")
         workdir = os.path.abspath(workdir)
         os.makedirs(workdir, exist_ok=True)

@@ -1,20 +1,54 @@
+"""
+Units APIs
+===========
+some apis for units convert.
+"""
+__all__ = [
+    "Units",
+    "ByteUnits"
+]
+
 import abc
 
 
 class Units(object):
 
+    """
+    The basic class of all units
+    """
+
     @classmethod
     @abc.abstractmethod
     def convert(cls, _from, _to, _value):
+        """
+        convert value from unit '_from' to unit '_to'
+
+        :param _from: the instance of ``Units``
+        :param _to: the instance of ``Units``
+        :param _value: a number value
+        :return: a number value
+        """
         pass
 
     @classmethod
     @abc.abstractmethod
     def parse(cls, s: str):
+        """
+        parse str value
+
+        :param s: value
+        :return: a tuple consist of value and units, (value, units)
+        """
         pass
 
     @abc.abstractmethod
     def to_string(self, _value=None) -> str:
+        """
+        Get a str value
+
+        :param _value: a number value
+        :return: a str value
+        """
         pass
 
     def __repr__(self):
@@ -31,6 +65,10 @@ class Units(object):
 
 
 class ByteUnits(Units):
+
+    """
+    An units class used for handling byte convert
+    """
 
     PREFIX_SEQUENCE = "-KMGTPEZY"
 

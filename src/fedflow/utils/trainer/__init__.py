@@ -1,1 +1,10 @@
-from fedflow.utils.trainer.supervised_trainer import SupervisedTrainer
+"""
+Trainers
+=========
+
+"""
+__all__ = [
+    "SupervisedTrainer"
+]
+
+from fedflow.utils.trainer.supervised_trainer import *

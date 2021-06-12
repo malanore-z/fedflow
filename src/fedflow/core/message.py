@@ -1,3 +1,13 @@
+"""
+Process communication
+=====================
+"""
+
+__all__ = [
+    "Message",
+    "MessageListener"
+]
+
 import abc
 import logging
 import threading
@@ -119,6 +129,12 @@ class MessageListener():
 
     @classmethod
     def register_default_handler(cls, default_handler):
+        """
+        register default handler
+        the action will overwrite previous default handler
+        :param default_handler:
+        :return:
+        """
         if default_handler is None:
             cls.logger.warning("default handler cannot be None.")
             return
