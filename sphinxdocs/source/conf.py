@@ -86,4 +86,4 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static', 'CNAME']
 
 html_favicon = os.path.join(absdir, "Rope.ico")
-html_extra_path = [os.path.join(absdir, "CNAME"), ]
+html_extra_path = [os.path.join(absdir, "CNAME"), os.path.join(absdir, '.nojekyll')]
