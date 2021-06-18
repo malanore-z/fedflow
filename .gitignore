@@ -41,10 +41,12 @@ Thumbs.db
 .gradle
 
 # Python
+.venv/
+venv/
 __pycache__
 dist/
 build/
-fedflow.egg-info/
+*.egg-info/
 
 # project
 logs

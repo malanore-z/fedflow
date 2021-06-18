@@ -1,6 +1,8 @@
 """
 Templates for reporting
 =========================
+
+Some methods for concat html string.
 """
 
 __all__ = [
@@ -23,7 +25,7 @@ group_html = """<div style="width: 80%%; margin-left: 10%%">
 </div>"""
 
 
-def success_table(datas):
+def success_table(datas: list) -> str:
     ret = ["<table border>",
            "<tr><td>task id</td><td>train acc</td><td>val acc</td>",
            "<td>data</td><td>load time</td><td>train time</td></tr>"]
@@ -34,7 +36,7 @@ def success_table(datas):
     return "".join(ret)
 
 
-def fail_table(datas):
+def fail_table(datas: list) -> str:
     ret = ["<table border>", "<tr><td>task id</td><td>stage</td><td>message</td></tr>"]
     for taskid, data in datas:
         ret.append("<tr><td>%s</td><td>%s</td><td>%s</td></tr>" % (taskid, data["stage"], data["message"]))
@@ -42,7 +44,14 @@ def fail_table(datas):
     return "".join(ret)
 
 
-def group_template(name, result: dict):
+def group_template(name: str, result: dict) -> str:
+    """
+    group report template html.
+
+    :param name: group name
+    :param result: group schedule result.
+    :return: the html string.
+    """
     global group_html
     success_datas = []
     fail_datas = []

@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module utils</span>
 <span class="sd">==============</span>
+
+<span class="sd">Module utils for import or migrate module</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -177,17 +182,25 @@
 <span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">PurePath</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 
 <div class="viewcode-block" id="ModuleUtils"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils">[docs]</a><span class="k">class</span> <span class="nc">ModuleUtils</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
 <div class="viewcode-block" id="ModuleUtils.migrate_module"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.migrate_module">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">migrate_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">dst_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">migrate_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        migrate a module from ``src`` to ``dst``, and rename it to ``dst_name``.</span>
+
+<span class="sd">        :param src: the module source dir.</span>
+<span class="sd">        :param dst: target dir.</span>
+<span class="sd">        :param dst_name: new module name, the module name will keep if this param is None.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">src_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dst_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -201,7 +214,7 @@
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">PurePath</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">dst_name</span> <span class="o">+</span> <span class="s2">&quot;.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">as_posix</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="ModuleUtils.import_module"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.import_module">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">import_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">import_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Import the module dynamically</span>
 
@@ -220,22 +233,14 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">module</span></div>
 
-<div class="viewcode-block" id="ModuleUtils.import_config"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.import_config">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">import_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;noniid_config&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ModuleUtils.import_start"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.import_start">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">import_start</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;noniid_startup&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="ModuleUtils.exists_module"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.exists_module">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">exists_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">exists_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        check if module is exists.</span>
+
+<span class="sd">        :param module: the module to be checked.</span>
+<span class="sd">        :return: a bool value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">exec</span><span class="p">(</span><span class="s2">&quot;import &quot;</span> <span class="o">+</span> <span class="n">module</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">True</span>
@@ -243,7 +248,14 @@
             <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="ModuleUtils.get_name"><a class="viewcode-back" href="../../../utils.html#fedflow.utils.ModuleUtils.get_name">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the name of ``obj`` in ``module``.</span>
+
+<span class="sd">        :param module: the module to found ``obj``.</span>
+<span class="sd">        :param obj: the obj need to get name.</span>
+<span class="sd">        :return: a string value represent the name of ``obj`` or None if not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

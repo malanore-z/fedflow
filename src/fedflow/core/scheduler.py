@@ -1,6 +1,11 @@
 """
 Schedule core
 ==============
+
+The core of fedflow schedule.
+
+``GroupScheduler`` is responsible for the parallel operation of scheduling tasks.
+Generally, user should not use GroupScheduler directly.
 """
 
 __all__ = [
@@ -9,6 +14,7 @@ __all__ = [
 
 import logging
 import time
+from typing import Union
 
 import ngpuinfo
 import psutil
@@ -23,21 +29,46 @@ from fedflow.units import ByteUnits
 
 
 class TaskHandler(Handler):
+    """
+    The handler of task process message.
+    It should be registered as default handler of MessageListener before every schedule round.
+    """
 
     main_logger = logging.getLogger("fedflow.task.main")
 
     def __init__(self, group: TaskGroup):
+        """
+        Construct a handler instance for specify group.
+
+        :param group: the task group in scheduling.
+        """
         super(TaskHandler, self).__init__()
         self.group = group
 
-    def handle(self, source, cmd, data) -> None:
+    def handle(self, source: str, cmd: str, data: dict) -> None:
+        """
+        handle task message.
+
+        :param source: the task id
+        :param cmd: the task action need be handled, in current version, the value is always ``update_status``
+        :param data: the payload data.
+        :return:
+        """
         if cmd == "update_status":
             task = self.group.get_task(source)
             status = data.pop("status")
             self.main_logger.info("{%s} receive update status{%s} signal", task.task_id, status.name)
             self.handle_status(task, status, data)
 
-    def handle_status(self, task: Task, status, data):
+    def handle_status(self, task: Task, status: TaskStatus, data: dict) -> None:
+        """
+        handle the status update of task.
+
+        :param task: the task which need update status.
+        :param status: the target status.
+        :param data: some extra data.
+        :return:
+        """
         if status == TaskStatus.EXCEPTION:
             message = data["message"]
             stage = data["stage"]
@@ -54,30 +85,58 @@ class TaskHandler(Handler):
         else:
             self.group.move_task(task.task_id, task.status, status)
 
-    def __interrupt(self, task, interrupt_from):
+    def __interrupt(self, task: Task, interrupt_from: str) -> None:
+        """
+        When there is insufficient memory(or cuda memory) during the scheduling process, the task will be interrupt and
+        the status of task is set to ``TaskStatus.INTERRUPT``.
+
+        If interrupt occurs in ``load`` stage, the task process will be killed, and the status is set to
+        ``TaskStatus.AVAILABLE``. Then, the task is added to available task queue, and waiting for the next schedule.
+
+        If interrupt occurs in ``train`` stage, the task process will be reserved, and the status is set to
+        ``TaskStatus.WAITING``. Then, the task is added to waiting task queue, and waiting for the next scheduler.
+
+        The exception is if the maximum number of retries(``load`` and ``train`` stage are count separately) is reached,
+        the status of task is set to ``TaskStatus.EXCEPTION``, and the task process will be killed.
+
+        :param task: the task which interrupted.
+        :param interrupt_from: the stage occurs OOM(or cuda OOM), its value only can be 'load' or 'train'
+        :return:
+        """
         if interrupt_from == "LOAD":
             if task.load_numbers < Config.get_property("scheduler.load-nretry"):
                 task.exit()
                 self.group.move_task(task.task_id, task.status, TaskStatus.AVAILABLE)
             else:
                 task.exit()
-                self.group.report_exception(task.task_id, task.status, "LoadNumbersExceed")
+                self.group.report_exception(task.task_id, "load", "LoadNumbersExceed")
                 self.group.move_task(task.task_id, task.status, TaskStatus.EXCEPTION)
         else:
             if task.train_numbers < Config.get_property("scheduler.train-nretry"):
                 self.group.move_task(task.task_id, task.status, TaskStatus.WAITING)
             else:
                 task.exit()
-                self.group.report_exception(task.task_id, task.status, "TrainNumbersExceed")
+                self.group.report_exception(task.task_id, "train", "TrainNumbersExceed")
                 self.group.move_task(task.task_id, task.status, TaskStatus.EXCEPTION)
 
 
 class GroupScheduler(object):
+    """
+    The scheduler of ``TaskGroup``.
+    """
 
     logger = logging.getLogger("fedflow.scheduler")
 
     @classmethod
-    def schedule(cls, group: TaskGroup):
+    def schedule(cls, group: TaskGroup) -> None:
+        """
+        The entry of schedule.
+
+        This method is blocked.
+
+        :param group: the task group waiting for scheduling.
+        :return:
+        """
         cls.logger.info("schedule group #%s", group.index)
         MessageListener.register_default_handler(TaskHandler(group))
 
@@ -148,14 +207,26 @@ class GroupScheduler(object):
         Mail.send_group_result(group.group_name, group.result)
 
     @classmethod
-    def cpu_free(cls):
+    def cpu_free(cls) -> bool:
+        """
+        check cpu utilization.
+
+        :return: a bool value.
+        """
         cpu_precent = psutil.cpu_percent()
         utilization_limit = Config.get_property("utilization-limit.cpu")
         cls.logger.debug("CPU utilization: %.2f%%", cpu_precent)
         return cpu_precent < 100 * utilization_limit
 
     @classmethod
-    def memory_free(cls, require_memory=None):
+    def memory_free(cls, require_memory: Union[int, str] = None) -> bool:
+        """
+        check memory utilization
+
+        :param require_memory: the memory current task required. the type of ``require_memory`` can be int(the unit is
+            Byte) or str(number + unit, for example, '123KB', '456 MB', '789MiB').
+        :return: a bool value
+        """
         if require_memory is None:
             require_memory = Config.get_property("scheduler.default-memory")
         require_memory = cls.parse_memory_value(require_memory)
@@ -181,7 +252,14 @@ class GroupScheduler(object):
         return True
 
     @classmethod
-    def assign_cuda(cls, require_cuda_memory=None, device:str=None):
+    def assign_cuda(cls, require_cuda_memory=None, device: str = None):
+        """
+        assign a cuda device.
+
+        :param require_cuda_memory: the cuda memory current task required.
+        :param device: specify a device, then other device will be ignored.
+        :return: An integer represents the cuda id
+        """
         if require_cuda_memory is None:
             require_cuda_memory = Config.get_property("scheduler.default-cuda-memory")
         require_cuda_memory = cls.parse_memory_value(require_cuda_memory)

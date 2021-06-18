@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Introduction &mdash; Fedflow 0.2.0 documentation</title>
+  <title>开始使用 &mdash; Fedflow 0.2.0 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples" href="example.html" />
+    <link rel="next" title="配置" href="config.html" />
     <link rel="prev" title="Fedflow: auto-scheduler for pytorch task." href="index.html" /> 
 </head>
 
@@ -89,18 +89,20 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">开始使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">快速开始</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -156,7 +158,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Introduction</li>
+      <li>开始使用</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,44 +177,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="description">
-<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>auto-scheduler for pytorch task.</p>
+  <div class="section" id="id1">
+<h1>开始使用<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>安装<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">instal</span> <span class="pre">fedflow==0.2.0</span></code></p>
 </div>
-<div class="section" id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">instal</span> <span class="pre">fedflow==0.2.0b2</span></code></p>
-</div>
-<div class="section" id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>快速开始<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Define your task</p></li>
+<li><p>定义任务</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fedflow</span> <span class="kn">import</span> <span class="n">Task</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
 <span class="k">class</span> <span class="nc">MyTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Some loading actions</span>
-        <span class="c1"># It is recommended that user keep memory usage unchanged after this function is called.</span>
-        <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Load] Task </span><span class="si">%s</span><span class="s2"> loading </span><span class="si">%d%%</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
 
-    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="c1"># Some actions that use GPU</span>
-        <span class="c1"># In this method, self.device is usable, user can load data to specify cuda by use self.device field.</span>
-        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[Train] Task </span><span class="si">%s</span><span class="s2"> training </span><span class="si">%d%%</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="p">{}</span>
 </pre></div>
 </div>
-<p>Users can simply define tasks by inheriting the Task class.</p>
-<p>In a simple scenario, user only need overwrite load and train methods, usually user should return a dict after call train
-method, the dict contains data will be reported.</p>
+<p>用户可以通过继承 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 的形式很方便的定义任务。</p>
+<p>在简单场景下，用户只需要重写 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 的 <code class="docutils literal notranslate"><span class="pre">load</span></code> 和 <code class="docutils literal notranslate"><span class="pre">train</span></code> 方法，通常，用户需要在 <code class="docutils literal notranslate"><span class="pre">train</span></code> 方法中返回一个 <strong>可以序列化的dict</strong> ,
+这个 <code class="docutils literal notranslate"><span class="pre">dict</span></code> 中的数据将会用于生成训练报告。</p>
 <ol class="arabic simple" start="2">
-<li><p>Create task group</p></li>
+<li><p>创建任务组</p></li>
 </ol>
-<p>In Fedflow, the order of task execution is unknowable, so if you want to keep tasks in order, you need create groups.
-the groups are executed in the order in which they are added.</p>
+<p>在Fedflow中，任务的执行顺序是未知的，所以如果你需要让任务保持有序的话，需要创建一个任务组。任务组的执行顺序是严格有序的，按照它们被添加到流中的顺序,
+而每个任务组内的任务是无序的。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fedflow</span> <span class="kn">import</span> <span class="n">TaskGroup</span><span class="p">,</span> <span class="n">FedFlow</span>
 
 <span class="n">group_1</span> <span class="o">=</span> <span class="n">TaskGroup</span><span class="p">()</span>
@@ -226,12 +226,11 @@ the groups are executed in the order in which they are added.</p>
 <span class="n">FedFlow</span><span class="o">.</span><span class="n">add_group</span><span class="p">(</span><span class="n">group_2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the code above, group_1 will be executed first, but the order of tasks(0..9) execution is random. After all tasks in
-group_1 are executed, the tasks in group_2 will be executed.</p>
+<p>在上面的代码中， <code class="docutils literal notranslate"><span class="pre">group_1</span></code> 将会被先执行， 但是 <code class="docutils literal notranslate"><span class="pre">group_1</span></code> 中的任务的执行顺序是随机的， 在所有的任务被执行完后, <code class="docutils literal notranslate"><span class="pre">group_2</span></code> 的任务将会被执行。</p>
 <ol class="arabic simple" start="3">
 <li><p>Start</p></li>
 </ol>
-<p>When all groups were added to Fedflow, you can start Fedflow by only one-line code.</p>
+<p>当所有任务组都被添加到流中之后， 可以开始启动Fedflow， 这只需要一行代码。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Fedflow</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -244,7 +243,7 @@ group_1 are executed, the tasks in group_2 will be executed.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="example.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="config.html" class="btn btn-neutral float-right" title="配置" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="index.html" class="btn btn-neutral float-left" title="Fedflow: auto-scheduler for pytorch task." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

@@ -89,13 +89,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -103,7 +106,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core.html">fedflow.core package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fedflow.mail package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#mail-apis">Mail APIs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#send-mail-core-method">Send mail core method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#send-mail-core-methods">Send mail core methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#templates-for-reporting">Templates for reporting</a></li>
 </ul>
 </li>
@@ -179,10 +182,13 @@
 <span id="fedflow-mail-package"></span><h1>fedflow.mail package<a class="headerlink" href="#module-fedflow.mail" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="mail-apis">
 <h2>Mail APIs<a class="headerlink" href="#mail-apis" title="Permalink to this headline">¶</a></h2>
+<p>Classes and methods in this package is used for sending mail.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.mail.Mail">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.mail.</span></span><span class="sig-name descname"><span class="pre">Mail</span></span><a class="reference internal" href="_modules/fedflow/mail/mail.html#Mail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.Mail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The entry mail class.</p>
+<p>All code outside of this package should only use this class to send mail.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.mail.Mail.logger">
 <span class="sig-name descname"><span class="pre">logger</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Logger</span> <span class="pre">fedflow</span> <span class="pre">(INFO)&gt;</span></em><a class="headerlink" href="#fedflow.mail.Mail.logger" title="Permalink to this definition">¶</a></dt>
@@ -190,26 +196,61 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.mail.Mail.send_group_result">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">send_group_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/mail/mail.html#Mail.send_group_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.Mail.send_group_result" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">send_group_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/mail/mail.html#Mail.send_group_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.Mail.send_group_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>send report of a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – group name</p></li>
+<li><p><strong>result</strong> – the result need to be reported.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 </div>
-<span class="target" id="module-fedflow.mail.send_mail"></span><div class="section" id="send-mail-core-method">
-<h2>Send mail core method<a class="headerlink" href="#send-mail-core-method" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-fedflow.mail.send_mail"></span><div class="section" id="send-mail-core-methods">
+<h2>Send mail core methods<a class="headerlink" href="#send-mail-core-methods" title="Permalink to this headline">¶</a></h2>
+<p>Some methods used inside the mail package to actually send mail.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fedflow.mail.send_mail.send_mail">
 <span class="sig-prename descclassname"><span class="pre">fedflow.mail.send_mail.</span></span><span class="sig-name descname"><span class="pre">send_mail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">email.mime.text.MIMEText</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/mail/send_mail.html#send_mail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.send_mail.send_mail" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Send <code class="docutils literal notranslate"><span class="pre">message</span></code> to specify email address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> – the message to be sent.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <span class="target" id="module-fedflow.mail.templates"></span><div class="section" id="templates-for-reporting">
 <h2>Templates for reporting<a class="headerlink" href="#templates-for-reporting" title="Permalink to this headline">¶</a></h2>
+<p>Some methods for concat html string.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fedflow.mail.templates.group_template">
-<span class="sig-prename descclassname"><span class="pre">fedflow.mail.templates.</span></span><span class="sig-name descname"><span class="pre">group_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/mail/templates.html#group_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.templates.group_template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">fedflow.mail.templates.</span></span><span class="sig-name descname"><span class="pre">group_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/fedflow/mail/templates.html#group_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.mail.templates.group_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>group report template html.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – group name</p></li>
+<li><p><strong>result</strong> – group schedule result.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the html string.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 </div>

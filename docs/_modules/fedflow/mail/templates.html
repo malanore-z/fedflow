@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Templates for reporting</span>
 <span class="sd">=========================</span>
+
+<span class="sd">Some methods for concat html string.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -192,7 +197,7 @@
 <span class="s2">&lt;/div&gt;&quot;&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">success_table</span><span class="p">(</span><span class="n">datas</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">success_table</span><span class="p">(</span><span class="n">datas</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;table border&gt;&quot;</span><span class="p">,</span>
            <span class="s2">&quot;&lt;tr&gt;&lt;td&gt;task id&lt;/td&gt;&lt;td&gt;train acc&lt;/td&gt;&lt;td&gt;val acc&lt;/td&gt;&quot;</span><span class="p">,</span>
            <span class="s2">&quot;&lt;td&gt;data&lt;/td&gt;&lt;td&gt;load time&lt;/td&gt;&lt;td&gt;train time&lt;/td&gt;&lt;/tr&gt;&quot;</span><span class="p">]</span>
@@ -203,7 +208,7 @@
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">fail_table</span><span class="p">(</span><span class="n">datas</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">fail_table</span><span class="p">(</span><span class="n">datas</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&lt;table border&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;tr&gt;&lt;td&gt;task id&lt;/td&gt;&lt;td&gt;stage&lt;/td&gt;&lt;td&gt;message&lt;/td&gt;&lt;/tr&gt;&quot;</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">taskid</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datas</span><span class="p">:</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s2">&lt;/td&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s2">&lt;/td&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s2">&lt;/td&gt;&lt;/tr&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">taskid</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;stage&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]))</span>
@@ -211,7 +216,14 @@
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="group_template"><a class="viewcode-back" href="../../../mail.html#fedflow.mail.templates.group_template">[docs]</a><span class="k">def</span> <span class="nf">group_template</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<div class="viewcode-block" id="group_template"><a class="viewcode-back" href="../../../mail.html#fedflow.mail.templates.group_template">[docs]</a><span class="k">def</span> <span class="nf">group_template</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    group report template html.</span>
+
+<span class="sd">    :param name: group name</span>
+<span class="sd">    :param result: group schedule result.</span>
+<span class="sd">    :return: the html string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">group_html</span>
     <span class="n">success_datas</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">fail_datas</span> <span class="o">=</span> <span class="p">[]</span>

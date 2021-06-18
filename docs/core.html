@@ -89,13 +89,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -180,26 +183,54 @@
 <span id="fedflow-core-package"></span><h1>fedflow.core package<a class="headerlink" href="#module-fedflow.core.message" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="process-communication">
 <h2>Process communication<a class="headerlink" href="#process-communication" title="Permalink to this headline">¶</a></h2>
+<p>classes in this source file are used for communication among processes, user should not use them directly. the start and
+stop action of listener should only be called in fedflow framework.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fedflow.core.message.Handler">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.message.</span></span><span class="sig-name descname"><span class="pre">Handler</span></span><a class="reference internal" href="_modules/fedflow/core/message.html#Handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.Handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The basic class of message handler</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fedflow.core.message.Handler.handle">
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/message.html#Handler.handle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.Handler.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle message from other process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – where message from, generally, it is a uuid string.</p></li>
+<li><p><strong>cmd</strong> – command, it represents the action to be performed.</p></li>
+<li><p><strong>data</strong> – the payload data of message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.core.message.Message">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.message.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fedflow.core.message.Message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>The message data structure communication among processes.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.core.message.Message.cmd">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cmd</span></span><a class="headerlink" href="#fedflow.core.message.Message.cmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
+<dd><p>the command of this message</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.core.message.Message.data">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#fedflow.core.message.Message.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
+<dd><p>the payload data of this message</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.core.message.Message.source">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#fedflow.core.message.Message.source" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dd><p>where message from</p>
 </dd></dl>
 
 </dd></dl>
@@ -216,8 +247,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.message.MessageListener.start">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>start listen message
-:return:</p>
+<dd><p>start listen message</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -227,42 +262,72 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.message.MessageListener.register_handler">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">register_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.register_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.register_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>register proprietary handler for specify source
-:param source:
-:param handler:
-:param overwrite: whether overwrite handler if it exists
-:return:</p>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">register_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.message.Handler" title="fedflow.core.message.Handler"><span class="pre">fedflow.core.message.Handler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.register_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.register_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>register handler for specify source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – every handler need a source, and the source cannot be same to the source of MessageListener</p></li>
+<li><p><strong>handler</strong> – an instance of subclass of Handler</p></li>
+<li><p><strong>overwrite</strong> – whether overwrite handler if it exists</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.message.MessageListener.register_default_handler">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">register_default_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.register_default_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.register_default_handler" title="Permalink to this definition">¶</a></dt>
-<dd><p>register default handler
-the action will overwrite previous default handler
-:param default_handler:
-:return:</p>
+<dd><p>register default handler and the action will overwrite previous default handler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>default_handler</strong> – an instance of subclass of Handler, it will handle all message which has no specify
+handler. In init, the default handler will do nothing.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.message.MessageListener.stop">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>stop listening.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.message.MessageListener.mq">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">mq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.mq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.mq" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">mq</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">multiprocessing.context.BaseContext.Queue</span><a class="reference internal" href="_modules/fedflow/core/message.html#MessageListener.mq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.message.MessageListener.mq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get message queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 <span class="target" id="module-fedflow.core.scheduler"></span><div class="section" id="schedule-core">
 <h2>Schedule core<a class="headerlink" href="#schedule-core" title="Permalink to this headline">¶</a></h2>
+<p>The core of fedflow schedule.</p>
+<p><code class="docutils literal notranslate"><span class="pre">GroupScheduler</span></code> is responsible for the parallel operation of scheduling tasks.
+Generally, user should not use GroupScheduler directly.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.scheduler.</span></span><span class="sig-name descname"><span class="pre">GroupScheduler</span></span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The scheduler of <code class="docutils literal notranslate"><span class="pre">TaskGroup</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.logger">
 <span class="sig-name descname"><span class="pre">logger</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Logger</span> <span class="pre">fedflow.scheduler</span> <span class="pre">(INFO)&gt;</span></em><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.logger" title="Permalink to this definition">¶</a></dt>
@@ -270,23 +335,61 @@ the action will overwrite previous default handler
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.schedule">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.taskgroup.TaskGroup" title="fedflow.core.taskgroup.TaskGroup"><span class="pre">fedflow.core.taskgroup.TaskGroup</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.schedule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.schedule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">schedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.taskgroup.TaskGroup" title="fedflow.core.taskgroup.TaskGroup"><span class="pre">fedflow.core.taskgroup.TaskGroup</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.schedule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>The entry of schedule.</p>
+<p>This method is blocked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> – the task group waiting for scheduling.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.cpu_free">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cpu_free</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.cpu_free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.cpu_free" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cpu_free</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.cpu_free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.cpu_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>check cpu utilization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a bool value.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.memory_free">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">memory_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">require_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.memory_free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.memory_free" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">memory_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">require_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.memory_free"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.memory_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>check memory utilization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>require_memory</strong> – the memory current task required. the type of <code class="docutils literal notranslate"><span class="pre">require_memory</span></code> can be int(the unit is
+Byte) or str(number + unit, for example, ‘123KB’, ‘456 MB’, ‘789MiB’).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a bool value</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.assign_cuda">
 <em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">assign_cuda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">require_cuda_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/scheduler.html#GroupScheduler.assign_cuda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.scheduler.GroupScheduler.assign_cuda" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>assign a cuda device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>require_cuda_memory</strong> – the cuda memory current task required.</p></li>
+<li><p><strong>device</strong> – specify a device, then other device will be ignored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An integer represents the cuda id</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.scheduler.GroupScheduler.parse_memory_value">
@@ -298,10 +401,13 @@ the action will overwrite previous default handler
 </div>
 <span class="target" id="module-fedflow.core.task"></span><div class="section" id="task">
 <h2>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
+<p>The basic class of task.</p>
+<p>User define task by inherit the <code class="docutils literal notranslate"><span class="pre">Task</span></code> class and overwrite <code class="docutils literal notranslate"><span class="pre">load</span></code> and <code class="docutils literal notranslate"><span class="pre">train</span></code> methods.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.core.task.Task">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.task.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>the basic class of all user task</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.main_logger">
 <span class="sig-name descname"><span class="pre">main_logger</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;Logger</span> <span class="pre">fedflow.task.main</span> <span class="pre">(INFO)&gt;</span></em><a class="headerlink" href="#fedflow.core.task.Task.main_logger" title="Permalink to this definition">¶</a></dt>
@@ -315,14 +421,27 @@ the action will overwrite previous default handler
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Construct an instance of task</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_id</strong> – </p></li>
-<li><p><strong>estimate_memory</strong> – </p></li>
-<li><p><strong>estimate_cuda_memory</strong> – </p></li>
-<li><p><strong>device</strong> – </p></li>
+<li><p><strong>task_id</strong> – task unique id, default is uuid string.</p></li>
+<li><p><strong>estimate_memory</strong> – maximum memory expected to be used.</p></li>
+<li><p><strong>estimate_cuda_memory</strong> – maximum cuda memory expected to be used.</p></li>
+<li><p><strong>device</strong> – specify device the task used, if it’s None, the device will be decided by scheduler.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fedflow.core.task.Task.workdir">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">workdir</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#fedflow.core.task.Task.workdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The workdir of task.</p>
+<p>This property only can be used after task process was started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
 </dd></dl>
@@ -330,57 +449,118 @@ the action will overwrite previous default handler
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.status">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="pre">:</span> <span class="pre">fedflow.core.task.TaskStatus</span></em><a class="headerlink" href="#fedflow.core.task.Task.status" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The status of task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.start">
 <span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start task process
+<em>This method cannot be called by user.</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.start_load">
 <span class="sig-name descname"><span class="pre">start_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.start_load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.start_load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start loading.
+<em>This method cannot be called by user.</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.start_train">
 <span class="sig-name descname"><span class="pre">start_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.start_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.start_train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start training.
+<em>This method cannot be called by user.</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> – the device this task will use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.exit">
 <span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.exit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.exit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Exit task process.
+<em>This method cannot be called by user.</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.is_alive">
-<span class="sig-name descname"><span class="pre">is_alive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.is_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.is_alive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">is_alive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.is_alive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.is_alive" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the task process is alive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a bool value</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pipe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mq</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>subprocess code entry
-:param pipe: connection pipe between main process task and subprocess task
-:param mq: connection queue between main process scheduler and subprocess tasks
-:return:</p>
+<dd><p>subprocess code entry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pipe</strong> – connection pipe between main process task and subprocess task</p></li>
+<li><p><strong>mq</strong> – connection queue between main process scheduler and subprocess tasks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.load">
 <em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>User must overwrite this method in subclass.
-When implement subclass, user should put all loading action(such as load datasets) in this method.
-:return:</p>
+When implement subclass, user should put all loading action(such as load datasets) in this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.task.Task.train">
-<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>User muest overwrite this method in subclass.
-When implement subclass, user should put all computer action(such as train or predict) in this method.
-In this method, self.device is usable, user can load data to specify cuda by use self.device field.
-:return:</p>
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="_modules/fedflow/core/task.html#Task.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.Task.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>User must overwrite this method in subclass.
+When implement subclass, user should put all computer action(such as train or predict) in this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>device</strong> – the device this task will use.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dict represent some properties used for reporting.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -389,66 +569,79 @@ In this method, self.device is usable, user can load data to specify cuda by use
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.task.</span></span><span class="sig-name descname"><span class="pre">TaskStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/task.html#TaskStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.task.TaskStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>An enumeration.</p>
+<p>The task status enum.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.UNKNOWN">
 <span class="sig-name descname"><span class="pre">UNKNOWN</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.UNKNOWN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>the error status</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.INIT">
 <span class="sig-name descname"><span class="pre">INIT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.INIT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>construct a task instance and hasn’t started scheduling</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.AVAILABLE">
 <span class="sig-name descname"><span class="pre">AVAILABLE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.AVAILABLE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>start task subprocess</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.LOADING">
 <span class="sig-name descname"><span class="pre">LOADING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">3</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.LOADING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>start loading</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.WAITING">
 <span class="sig-name descname"><span class="pre">WAITING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">4</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.WAITING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>loaded successfully, and waiting for training</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.TRAINING">
 <span class="sig-name descname"><span class="pre">TRAINING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">5</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.TRAINING" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>start training</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.FINISHED">
 <span class="sig-name descname"><span class="pre">FINISHED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">6</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.FINISHED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>training successfully</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.EXITED">
 <span class="sig-name descname"><span class="pre">EXITED</span></span><em class="property"> <span class="pre">=</span> <span class="pre">7</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.EXITED" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>subprocess exited</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.EXCEPTION">
 <span class="sig-name descname"><span class="pre">EXCEPTION</span></span><em class="property"> <span class="pre">=</span> <span class="pre">8</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.EXCEPTION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>caught some exception while running</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.task.TaskStatus.INTERRUPT">
 <span class="sig-name descname"><span class="pre">INTERRUPT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">9</span></em><a class="headerlink" href="#fedflow.core.task.TaskStatus.INTERRUPT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>caught OOM(or cuda OOM) exception while running</p>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 <span class="target" id="module-fedflow.core.taskgroup"></span><div class="section" id="taskgroup">
 <h2>TaskGroup<a class="headerlink" href="#taskgroup" title="Permalink to this headline">¶</a></h2>
+<p>All tasks in one group will executed disorderly.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.taskgroup.</span></span><span class="sig-name descname"><span class="pre">TaskGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.core.taskgroup.</span></span><span class="sig-name descname"><span class="pre">TaskGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generally, tasks in one group should be similar, it means all tasks is instance of the same class.</p>
+<p>Of course, this is not mandatory, you just need to ensure that there are no dependencies between tasks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.global_ids">
 <span class="sig-name descname"><span class="pre">global_ids</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{}</span></em><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.global_ids" title="Permalink to this definition">¶</a></dt>
@@ -456,42 +649,63 @@ In this method, self.device is usable, user can load data to specify cuda by use
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate_cuda_memory</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a task group.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>group_name</strong> – </p></li>
-<li><p><strong>estimate_memory</strong> – </p></li>
-<li><p><strong>estimate_cuda_memory</strong> – </p></li>
-<li><p><strong>device</strong> – </p></li>
+<li><p><strong>group_name</strong> – the group name, it only used for create group directory and display in report.</p></li>
+<li><p><strong>estimate_memory</strong> – maximum memory expected to be used for every task in this group.</p></li>
+<li><p><strong>estimate_cuda_memory</strong> – maximum cuda memory expected to be used for every task in this group.</p></li>
+<li><p><strong>device</strong> – specify device the tasks in this group used, if it’s None, the device will be decided by</p></li>
 </ul>
 </dd>
 </dl>
+<p>scheduler.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.group_name">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group_name</span></span><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.group_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>only used for group directory name
-:return:</p>
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">group_name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.group_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>only used for group directory name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a string represent group name.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.add_task">
-<span class="sig-name descname"><span class="pre">add_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.Task" title="fedflow.core.task.Task"><span class="pre">fedflow.core.task.Task</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.add_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.add_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">add_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.Task" title="fedflow.core.task.Task"><span class="pre">fedflow.core.task.Task</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.add_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.add_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a task to this group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>task</strong> – the task to be added to this group</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.get_task">
 <span class="sig-name descname"><span class="pre">get_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fedflow.core.task.Task" title="fedflow.core.task.Task"><span class="pre">fedflow.core.task.Task</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.get_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.get_task" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get specify task in group
-:param task_id:
-:return:</p>
+<dd><p>Get specify task in group</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>task_id</strong> – the unique task id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an instance of <code class="docutils literal notranslate"><span class="pre">Task</span></code> or None if not found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.move_task">
-<span class="sig-name descname"><span class="pre">move_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_from</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.TaskStatus" title="fedflow.core.task.TaskStatus"><span class="pre">fedflow.core.task.TaskStatus</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">_to</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.TaskStatus" title="fedflow.core.task.TaskStatus"><span class="pre">fedflow.core.task.TaskStatus</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.move_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.move_task" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">move_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_from</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.TaskStatus" title="fedflow.core.task.TaskStatus"><span class="pre">fedflow.core.task.TaskStatus</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">_to</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fedflow.core.task.TaskStatus" title="fedflow.core.task.TaskStatus"><span class="pre">fedflow.core.task.TaskStatus</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.move_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.move_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Move task from one container to other container.
 An exception will be threw if task not exists in _from container.
 This method will update the status of task after successfully moved.</p>
@@ -511,28 +725,74 @@ This method will update the status of task after successfully moved.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.report_finish">
-<span class="sig-name descname"><span class="pre">report_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.report_finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.report_finish" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">report_finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.report_finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.report_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>report a task finished.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – the finished task id</p></li>
+<li><p><strong>data</strong> – extra report data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.report_exception">
-<span class="sig-name descname"><span class="pre">report_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.report_exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.report_exception" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">report_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.report_exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.report_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>report a task caught exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – the exception task id.</p></li>
+<li><p><strong>stage</strong> – the stage of exception caught(‘load’ or ‘train’).</p></li>
+<li><p><strong>message</strong> – exception message</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.finished">
-<span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.finished" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.finished" title="Permalink to this definition">¶</a></dt>
+<dd><p>If all tasks in this group is finished or caught exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a bool value</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.numbers">
 <span class="sig-name descname"><span class="pre">numbers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.numbers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.numbers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>the task numbers of this group</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a tuple <code class="docutils literal notranslate"><span class="pre">(process_number,</span> <span class="pre">waiting_number,</span> <span class="pre">training_number)</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.core.taskgroup.TaskGroup.retrieve_task">
-<span class="sig-name descname"><span class="pre">retrieve_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.retrieve_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.retrieve_task" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">retrieve_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fedflow.core.task.Task" title="fedflow.core.task.Task"><span class="pre">fedflow.core.task.Task</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/fedflow/core/taskgroup.html#TaskGroup.retrieve_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.core.taskgroup.TaskGroup.retrieve_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>randomly retrieve a task which has <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>status</strong> – which status task need</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the task retrieved or None if not found.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

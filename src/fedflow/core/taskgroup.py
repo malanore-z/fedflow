@@ -1,6 +1,8 @@
 """
 TaskGroup
 ==========
+
+All tasks in one group will executed disorderly.
 """
 
 __all__ = [
@@ -17,18 +19,26 @@ from fedflow.core.task import Task, TaskStatus
 
 class TaskGroup(object):
 
+    """
+    Generally, tasks in one group should be similar, it means all tasks is instance of the same class.
+
+    Of course, this is not mandatory, you just need to ensure that there are no dependencies between tasks.
+    """
+
     global_ids = set()
 
-    def __init__(self, group_name: int = None, *,
+    def __init__(self, group_name: str = None, *,
                  estimate_memory: Union[int, str] = None,
                  estimate_cuda_memory: Union[int, str] = None,
                  device=None):
         """
+        Construct a task group.
 
-        :param group_name:
-        :param estimate_memory:
-        :param estimate_cuda_memory:
-        :param device:
+        :param group_name: the group name, it only used for create group directory and display in report.
+        :param estimate_memory: maximum memory expected to be used for every task in this group.
+        :param estimate_cuda_memory: maximum cuda memory expected to be used for every task in this group.
+        :param device: specify device the tasks in this group used, if it's None, the device will be decided by
+        scheduler.
         """
         super(TaskGroup, self).__init__()
         self.index = -1
@@ -56,16 +66,23 @@ class TaskGroup(object):
         self.workdir = None
 
     @property
-    def group_name(self):
+    def group_name(self) -> str:
         """
-        only used for group directory name
-        :return:
+        only used for group directory name.
+
+        :return: a string represent group name.
         """
         if self.__group_name is not None:
             return self.__group_name
         return "group-%d" % self.index
 
-    def add_task(self, task: Task):
+    def add_task(self, task: Task) -> None:
+        """
+        Add a task to this group.
+
+        :param task: the task to be added to this group
+        :return:
+        """
         if task.device is None:
             task.device = self.device
 
@@ -82,8 +99,9 @@ class TaskGroup(object):
     def get_task(self, task_id: Union[int, str]) -> Union[Task, None]:
         """
         Get specify task in group
-        :param task_id:
-        :return:
+
+        :param task_id: the unique task id.
+        :return: an instance of ``Task`` or None if not found.
         """
         for k, v in self.tasks.items():
             task = v.get(task_id)
@@ -91,7 +109,7 @@ class TaskGroup(object):
                 return v.get(task_id)
         return None
 
-    def move_task(self, task_id: Union[int, str], _from: TaskStatus, _to: TaskStatus):
+    def move_task(self, task_id: Union[int, str], _from: TaskStatus, _to: TaskStatus) -> None:
         """
         Move task from one container to other container.
         An exception will be threw if task not exists in _from container.
@@ -108,7 +126,14 @@ class TaskGroup(object):
         self.tasks[_to][task_id] = task
         task.status = _to
 
-    def report_finish(self, task_id: Union[int, str], data=None):
+    def report_finish(self, task_id: Union[int, str], data=None) -> None:
+        """
+        report a task finished.
+
+        :param task_id: the finished task id
+        :param data: extra report data
+        :return:
+        """
         self.success_number += 1
         if data is None:
             data = {}
@@ -139,7 +164,15 @@ class TaskGroup(object):
         minutes = minutes % 60
         return "%02d:%02d:%02d.%03d" % (hours, minutes, seconds, milliseconds)
 
-    def report_exception(self, task_id: Union[int, str], stage: str, message: str):
+    def report_exception(self, task_id: Union[int, str], stage: str, message: str) -> None:
+        """
+        report a task caught exception.
+
+        :param task_id: the exception task id.
+        :param stage: the stage of exception caught('load' or 'train').
+        :param message: exception message
+        :return:
+        """
         self.failed_number += 1
         res = {
             "type": "fail",
@@ -150,10 +183,20 @@ class TaskGroup(object):
         }
         self.result[task_id] = res
 
-    def finished(self):
+    def finished(self) -> bool:
+        """
+        If all tasks in this group is finished or caught exception.
+
+        :return: a bool value
+        """
         return self.success_number + self.failed_number >= self.task_number
 
     def numbers(self):
+        """
+        the task numbers of this group
+
+        :return: a tuple ``(process_number, waiting_number, training_number)``
+        """
         waiting_number = len(self.tasks[TaskStatus.AVAILABLE]) \
                          + len(self.tasks[TaskStatus.LOADING]) \
                          + len(self.tasks[TaskStatus.WAITING])
@@ -161,7 +204,13 @@ class TaskGroup(object):
         process_number = waiting_number + training_number
         return process_number, waiting_number, training_number
 
-    def retrieve_task(self, status):
+    def retrieve_task(self, status) -> Union[Task, None]:
+        """
+        randomly retrieve a task which has ``status``.
+
+        :param status: which status task need
+        :return: the task retrieved or None if not found.
+        """
         tasks = self.tasks[status]
         keys = list(tasks.keys())
         if len(keys) > 0:

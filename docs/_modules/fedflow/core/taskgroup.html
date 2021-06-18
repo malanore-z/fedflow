@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">TaskGroup</span>
 <span class="sd">==========</span>
+
+<span class="sd">All tasks in one group will executed disorderly.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -186,18 +191,26 @@
 
 <div class="viewcode-block" id="TaskGroup"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup">[docs]</a><span class="k">class</span> <span class="nc">TaskGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generally, tasks in one group should be similar, it means all tasks is instance of the same class.</span>
+
+<span class="sd">    Of course, this is not mandatory, you just need to ensure that there are no dependencies between tasks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">global_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-<div class="viewcode-block" id="TaskGroup.__init__"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+<div class="viewcode-block" id="TaskGroup.__init__"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
                  <span class="n">estimate_memory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">estimate_cuda_memory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a task group.</span>
 
-<span class="sd">        :param group_name:</span>
-<span class="sd">        :param estimate_memory:</span>
-<span class="sd">        :param estimate_cuda_memory:</span>
-<span class="sd">        :param device:</span>
+<span class="sd">        :param group_name: the group name, it only used for create group directory and display in report.</span>
+<span class="sd">        :param estimate_memory: maximum memory expected to be used for every task in this group.</span>
+<span class="sd">        :param estimate_cuda_memory: maximum cuda memory expected to be used for every task in this group.</span>
+<span class="sd">        :param device: specify device the tasks in this group used, if it&#39;s None, the device will be decided by</span>
+<span class="sd">        scheduler.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TaskGroup</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -225,16 +238,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">group_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">group_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        only used for group directory name</span>
-<span class="sd">        :return:</span>
+<span class="sd">        only used for group directory name.</span>
+
+<span class="sd">        :return: a string represent group name.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__group_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__group_name</span>
         <span class="k">return</span> <span class="s2">&quot;group-</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
 
-<div class="viewcode-block" id="TaskGroup.add_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.add_task">[docs]</a>    <span class="k">def</span> <span class="nf">add_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.add_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.add_task">[docs]</a>    <span class="k">def</span> <span class="nf">add_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a task to this group.</span>
+
+<span class="sd">        :param task: the task to be added to this group</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">task</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
 
@@ -251,8 +271,9 @@
 <div class="viewcode-block" id="TaskGroup.get_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.get_task">[docs]</a>    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Task</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get specify task in group</span>
-<span class="sd">        :param task_id:</span>
-<span class="sd">        :return:</span>
+
+<span class="sd">        :param task_id: the unique task id.</span>
+<span class="sd">        :return: an instance of ``Task`` or None if not found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">task</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
@@ -260,7 +281,7 @@
                 <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="TaskGroup.move_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.move_task">[docs]</a>    <span class="k">def</span> <span class="nf">move_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">_from</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">,</span> <span class="n">_to</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.move_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.move_task">[docs]</a>    <span class="k">def</span> <span class="nf">move_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">_from</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">,</span> <span class="n">_to</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Move task from one container to other container.</span>
 <span class="sd">        An exception will be threw if task not exists in _from container.</span>
@@ -277,7 +298,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">_to</span><span class="p">][</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">task</span>
         <span class="n">task</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">_to</span></div>
 
-<div class="viewcode-block" id="TaskGroup.report_finish"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.report_finish">[docs]</a>    <span class="k">def</span> <span class="nf">report_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.report_finish"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.report_finish">[docs]</a>    <span class="k">def</span> <span class="nf">report_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        report a task finished.</span>
+
+<span class="sd">        :param task_id: the finished task id</span>
+<span class="sd">        :param data: extra report data</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">success_number</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
@@ -308,7 +336,15 @@
         <span class="n">minutes</span> <span class="o">=</span> <span class="n">minutes</span> <span class="o">%</span> <span class="mi">60</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">:</span><span class="si">%02d</span><span class="s2">:</span><span class="si">%02d</span><span class="s2">.</span><span class="si">%03d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">hours</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">milliseconds</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TaskGroup.report_exception"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.report_exception">[docs]</a>    <span class="k">def</span> <span class="nf">report_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.report_exception"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.report_exception">[docs]</a>    <span class="k">def</span> <span class="nf">report_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        report a task caught exception.</span>
+
+<span class="sd">        :param task_id: the exception task id.</span>
+<span class="sd">        :param stage: the stage of exception caught(&#39;load&#39; or &#39;train&#39;).</span>
+<span class="sd">        :param message: exception message</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">failed_number</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;fail&quot;</span><span class="p">,</span>
@@ -319,10 +355,20 @@
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span></div>
 
-<div class="viewcode-block" id="TaskGroup.finished"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.finished">[docs]</a>    <span class="k">def</span> <span class="nf">finished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.finished"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.finished">[docs]</a>    <span class="k">def</span> <span class="nf">finished</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If all tasks in this group is finished or caught exception.</span>
+
+<span class="sd">        :return: a bool value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_number</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">failed_number</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_number</span></div>
 
 <div class="viewcode-block" id="TaskGroup.numbers"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.numbers">[docs]</a>    <span class="k">def</span> <span class="nf">numbers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        the task numbers of this group</span>
+
+<span class="sd">        :return: a tuple ``(process_number, waiting_number, training_number)``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">waiting_number</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">AVAILABLE</span><span class="p">])</span> \
                          <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">LOADING</span><span class="p">])</span> \
                          <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">WAITING</span><span class="p">])</span>
@@ -330,7 +376,13 @@
         <span class="n">process_number</span> <span class="o">=</span> <span class="n">waiting_number</span> <span class="o">+</span> <span class="n">training_number</span>
         <span class="k">return</span> <span class="n">process_number</span><span class="p">,</span> <span class="n">waiting_number</span><span class="p">,</span> <span class="n">training_number</span></div>
 
-<div class="viewcode-block" id="TaskGroup.retrieve_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.retrieve_task">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="TaskGroup.retrieve_task"><a class="viewcode-back" href="../../../core.html#fedflow.core.taskgroup.TaskGroup.retrieve_task">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Task</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        randomly retrieve a task which has ``status``.</span>
+
+<span class="sd">        :param status: which status task need</span>
+<span class="sd">        :return: the task retrieved or None if not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">status</span><span class="p">]</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tasks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>

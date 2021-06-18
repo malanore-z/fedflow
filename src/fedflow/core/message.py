@@ -1,9 +1,13 @@
 """
 Process communication
 =====================
+
+classes in this source file are used for communication among processes, user should not use them directly. the start and
+stop action of listener should only be called in fedflow framework.
 """
 
 __all__ = [
+    "Handler",
     "Message",
     "MessageListener"
 ]
@@ -16,28 +20,27 @@ import multiprocessing
 from collections import namedtuple
 
 
-"""
-The message data structure communication among processes.
-source: where message from
-cmd: the command of this message
-data: the payload data of this message
-"""
 Message = namedtuple("Message", ["source", "cmd", "data"])
+Message.__doc__ = "The message data structure communication among processes."
+Message.source.__doc__ = "where message from"
+Message.cmd.__doc__ = "the command of this message"
+Message.data.__doc__ = "the payload data of this message"
 
 
 class Handler(object):
 
     """
-    The super class of message handler
+    The basic class of message handler
     """
 
     @abc.abstractmethod
-    def handle(self, source, cmd, data) -> None:
+    def handle(self, source: str, cmd: str, data: dict) -> None:
         """
-        handle message
-        :param source: where message from
-        :param cmd: command
-        :param data: payload data
+        handle message from other process.
+
+        :param source: where message from, generally, it is a uuid string.
+        :param cmd: command, it represents the action to be performed.
+        :param data: the payload data of message.
         :return:
         """
         pass
@@ -46,10 +49,10 @@ class Handler(object):
 class SystemHandler(Handler):
 
     """
-    The handler used by MessageListener
+    The self-message handler used by MessageListener
     """
 
-    def handle(self, source, cmd, data):
+    def handle(self, source: str, cmd: str, data: dict):
         # Nothing to do
         pass
 
@@ -60,27 +63,31 @@ class DefaultHandler(Handler):
     The default handler, it is only used to avoid null pointer exception.
     """
 
-    def handle(self, source, cmd, data) -> None:
+    def handle(self, source: str, cmd: str, data: dict) -> None:
         # Nothing to do
         logging.getLogger("fedflow.msglistener").warning("No default handler.")
 
 
-class MessageListener():
+class MessageListener(object):
 
     logger = logging.getLogger("fedflow.msglistener")
 
     # uuid source
     __source = uuid.uuid4()
+    # the handler for self-message
     __system_handler = SystemHandler()
+    # the default handler for message which has no specify handler
     __default_handler = DefaultHandler()
     # handlers for specify source
     __handlers = {}
+    # the message queue for all processes
     __mq = multiprocessing.Queue()
 
     @classmethod
     def start(cls) -> None:
         """
         start listen message
+
         :return:
         """
         t = threading.Thread(target=cls.run)
@@ -92,6 +99,7 @@ class MessageListener():
             msg: Message = cls.__mq.get()
             cls.logger.debug("receive message{source: %s, cmd: %s}", msg.source, msg.cmd)
             if msg.source == cls.__source:
+                # the message from MessageListener
                 if msg.cmd == "STOP":
                     # stop listen
                     cls.logger.info("receive STOP signal.")
@@ -110,11 +118,12 @@ class MessageListener():
                 cls.logger.error("An error occurred while handling message.", exc_info=True, stack_info=True)
 
     @classmethod
-    def register_handler(cls, source, handler, overwrite=False):
+    def register_handler(cls, source: str, handler: Handler, overwrite=False) -> None:
         """
-        register proprietary handler for specify source
-        :param source:
-        :param handler:
+        register handler for specify source.
+
+        :param source: every handler need a source, and the source cannot be same to the source of MessageListener
+        :param handler: an instance of subclass of Handler
         :param overwrite: whether overwrite handler if it exists
         :return:
         """
@@ -130,9 +139,10 @@ class MessageListener():
     @classmethod
     def register_default_handler(cls, default_handler):
         """
-        register default handler
-        the action will overwrite previous default handler
-        :param default_handler:
+        register default handler and the action will overwrite previous default handler.
+
+        :param default_handler: an instance of subclass of Handler, it will handle all message which has no specify
+            handler. In init, the default handler will do nothing.
         :return:
         """
         if default_handler is None:
@@ -143,10 +153,21 @@ class MessageListener():
 
     @classmethod
     def stop(cls):
+        """
+        stop listening.
+
+        :return:
+        """
         cls.logger.info("attempt stop.")
+        # send stop message to self
         msg = Message(cmd="STOP", source=cls.__source, data={})
         cls.__mq.put(msg)
 
     @classmethod
-    def mq(cls):
+    def mq(cls) -> multiprocessing.Queue:
+        """
+        Get message queue
+
+        :return:
+        """
         return cls.__mq

@@ -1,46 +1,43 @@
-Introduction
+开始使用
 ==============
 
-Description
-***************
-
-auto-scheduler for pytorch task.
-
-Install
+安装
 **********
 
-``pip instal fedflow==0.2.0b2``
+``pip instal fedflow==0.2.0``
 
-Quick Start
+快速开始
 ************
 
-1. Define your task
+1. 定义任务
 
 .. code:: python
 
     from fedflow import Task
+    import time
 
     class MyTask(Task):
 
         def load(self) -> None:
-            # Some loading actions
-            # It is recommended that user keep memory usage unchanged after this function is called.
-            pass
+            for i in range(10):
+                time.sleep(1)
+                print("[Load] Task %s loading %d%%." % (self.task_id, 10 * (i + 1)))
 
-        def train(self) -> dict:
-            # Some actions that use GPU
-            # In this method, self.device is usable, user can load data to specify cuda by use self.device field.
-            pass
+        def train(self, device: str) -> dict:
+            for i in range(20):
+                time.sleep(1)
+                print("[Train] Task %s training %d%%." % (self.task_id, 5 * (i + 1)))
+            return {}
 
-Users can simply define tasks by inheriting the Task class.
+用户可以通过继承 ``Task`` 的形式很方便的定义任务。
 
-In a simple scenario, user only need overwrite load and train methods, usually user should return a dict after call train
-method, the dict contains data will be reported.
+在简单场景下，用户只需要重写 ``Task`` 的 ``load`` 和 ``train`` 方法，通常，用户需要在 ``train`` 方法中返回一个 **可以序列化的dict** ,
+这个 ``dict`` 中的数据将会用于生成训练报告。
 
-2. Create task group
+2. 创建任务组
 
-In Fedflow, the order of task execution is unknowable, so if you want to keep tasks in order, you need create groups.
-the groups are executed in the order in which they are added.
+在Fedflow中，任务的执行顺序是未知的，所以如果你需要让任务保持有序的话，需要创建一个任务组。任务组的执行顺序是严格有序的，按照它们被添加到流中的顺序,
+而每个任务组内的任务是无序的。
 
 .. code:: python
 
@@ -56,12 +53,12 @@ the groups are executed in the order in which they are added.
     FedFlow.add_group(group_1)
     FedFlow.add_group(group_2)
 
-In the code above, group_1 will be executed first, but the order of tasks(0..9) execution is random. After all tasks in
-group_1 are executed, the tasks in group_2 will be executed.
+
+在上面的代码中， ``group_1`` 将会被先执行， 但是 ``group_1`` 中的任务的执行顺序是随机的， 在所有的任务被执行完后, ``group_2`` 的任务将会被执行。
 
 3. Start
 
-When all groups were added to Fedflow, you can start Fedflow by only one-line code.
+当所有任务组都被添加到流中之后， 可以开始启动Fedflow， 这只需要一行代码。
 
 .. code:: python
 

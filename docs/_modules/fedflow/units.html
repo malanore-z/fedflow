@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -226,11 +229,11 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Units.from_units"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.from_units">[docs]</a>    <span class="k">def</span> <span class="nf">from_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_from</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">_from</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">from_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_from</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">_from</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Units.to_units"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.Units.to_units">[docs]</a>    <span class="k">def</span> <span class="nf">to_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span></div></div>
+    <span class="k">def</span> <span class="nf">to_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Units</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_to</span><span class="p">,</span> <span class="n">_value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ByteUnits"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits">[docs]</a><span class="k">class</span> <span class="nc">ByteUnits</span><span class="p">(</span><span class="n">Units</span><span class="p">):</span>
@@ -264,6 +267,12 @@
 
 <div class="viewcode-block" id="ByteUnits.parse"><a class="viewcode-back" href="../../fedflow.html#fedflow.units.ByteUnits.parse">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        parse a str to a tuple ``(int_value, units)``</span>
+
+<span class="sd">        :param s:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;s cannot be None&quot;</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>

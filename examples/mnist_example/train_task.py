@@ -28,12 +28,12 @@ class TrainTask(Task):
         self.mnist_optim = optim.SGD(self.mnist_model.parameters(), lr=0.1)
         self.criterion = nn.CrossEntropyLoss()
 
-    def train(self) -> None:
+    def train(self, device) -> dict:
         if self.pre_aggregate_task is not None:
             init_model_path = os.path.join(self.pre_aggregate_task.workdir, "aggregate.pth")
         else:
             init_model_path = None
-        trainer = SupervisedTrainer(self.mnist_model, self.mnist_optim, self.criterion, epoch=40, device=self.device,
+        trainer = SupervisedTrainer(self.mnist_model, self.mnist_optim, self.criterion, epoch=40, device=device,
                                     init_model_path=init_model_path, console_out="console.out")
         trainer.mount_dataset(self.mnist_dataset, batch_size=128)
         return trainer.train()

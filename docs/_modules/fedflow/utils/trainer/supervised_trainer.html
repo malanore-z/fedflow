@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -167,7 +170,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for fedflow.utils.trainer.supervised_trainer</h1><div class="highlight"><pre>
-<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Supervised Trainer</span>
+<span class="sd">======================</span>
+
+<span class="sd">A trainer used for supervised training by pytorch.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;SupervisedTrainer&quot;</span>
 <span class="p">]</span>
 
@@ -185,7 +195,25 @@
 
 <div class="viewcode-block" id="SupervisedTrainer"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer">[docs]</a><span class="k">class</span> <span class="nc">SupervisedTrainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A trainer used for supervised training by pytorch.</span>
+
+<span class="sd">    After training of this trainer, there are 4 files will appeared in current dir:</span>
+
+<span class="sd">        * history.json: the data of history(contains loss and acc of train and validate).</span>
+<span class="sd">        * history.png: the chart of history</span>
+<span class="sd">        * parameter.pth: the parameters of model</span>
+<span class="sd">        * optimizer.pth: the parameters of optimizer</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">History</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;History&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="s2">&quot;train_acc&quot;</span><span class="p">,</span> <span class="s2">&quot;val_loss&quot;</span><span class="p">,</span> <span class="s2">&quot;val_acc&quot;</span><span class="p">,</span> <span class="s2">&quot;lr&quot;</span><span class="p">])</span>
+    <span class="n">History</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;Record history data during training&quot;</span>
+    <span class="n">History</span><span class="o">.</span><span class="n">train_acc</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;train accuracy of every epoch&quot;</span>
+    <span class="n">History</span><span class="o">.</span><span class="n">val_acc</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;validate accuracy of every epoch&quot;</span>
+    <span class="n">History</span><span class="o">.</span><span class="n">train_loss</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;train loss of every epoch&quot;</span>
+    <span class="n">History</span><span class="o">.</span><span class="n">val_loss</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;validate loss of every epoch&quot;</span>
+    <span class="n">History</span><span class="o">.</span><span class="n">lr</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;learning rate of every epoch&quot;</span>
 
 <div class="viewcode-block" id="SupervisedTrainer.__init__"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
                  <span class="n">init_model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -197,6 +225,38 @@
                  <span class="n">checkpoint_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                  <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">,</span>
                  <span class="n">console_out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a trainer.</span>
+
+<span class="sd">        :param model: an instance of ``torch.nn.Module``.</span>
+<span class="sd">        :param optimizer: an instance of pytorch optimizer.</span>
+<span class="sd">        :param criterion: loss function</span>
+<span class="sd">        :param lr_scheduler: an instance of ``torch.optim.lr_scheduler._LRScheduler`` or</span>
+<span class="sd">            ``torch.optim.lr_scheduler.ReduceLROnPlateau``</span>
+<span class="sd">        :param init_model_path: the init model parameters path.</span>
+<span class="sd">        :param init_optim_path: the init optimizer parameters path.</span>
+<span class="sd">        :param dataset: the datasets used for this trainer.</span>
+<span class="sd">        :param batch_size: the batch size</span>
+<span class="sd">        :param epoch: the epoch</span>
+<span class="sd">        :param epoch_action: when every epoch finished, the epoch_action method will be called. In this method, you can</span>
+<span class="sd">            update ``lr`` etc. The follow is an example of epoch_action:</span>
+
+<span class="sd">            &gt;&gt;&gt; class EpochAction(object):</span>
+<span class="sd">            &gt;&gt;&gt;     def __init__(self, optim):</span>
+<span class="sd">            &gt;&gt;&gt;         super(SupervisedTrainer, self).__init__()</span>
+<span class="sd">            &gt;&gt;&gt;         self.reduce = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, mode=&quot;max&quot;)</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt;     # The complete method signature is:</span>
+<span class="sd">            &gt;&gt;&gt;     # def __call__(self, *, model, optimizer, criterion, lr_scheduler,</span>
+<span class="sd">            &gt;&gt;&gt;     #               train_loss, train_acc, val_loss, val_acc, lr):</span>
+<span class="sd">            &gt;&gt;&gt;     def __call__(self, *, val_acc, *args, **kwargs):</span>
+<span class="sd">            &gt;&gt;&gt;         self.reduce.step(val_acc)</span>
+
+<span class="sd">        :param checkpoint_interval: the interval of save parameters, the trainer will not save parameters if this param</span>
+<span class="sd">            if 0.</span>
+<span class="sd">        :param device: the device used for training.</span>
+<span class="sd">        :param console_out: redirect print.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SupervisedTrainer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
@@ -226,7 +286,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">History</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[])</span></div>
 
-<div class="viewcode-block" id="SupervisedTrainer.mount_dataset"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.mount_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">mount_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">val_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+<div class="viewcode-block" id="SupervisedTrainer.mount_dataset"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.mount_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">mount_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">val_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        mount dataset to this trainer.</span>
+
+<span class="sd">        :param dataset: the complete dataset or train dataset.</span>
+<span class="sd">        :param val_dataset: validate dataset, if it&#39;s None, this method will split validate dataset from ``dataset``.</span>
+<span class="sd">        :param val_ratio: the ratio of validate dataset when split.</span>
+<span class="sd">        :param batch_size: the batch size.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dataset cannot be None.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -239,21 +308,21 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">val_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SupervisedTrainer.mount_dataloader"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.mount_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">mount_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataloader</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">):</span>
+<div class="viewcode-block" id="SupervisedTrainer.mount_dataloader"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.mount_dataloader">[docs]</a>    <span class="k">def</span> <span class="nf">mount_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dataloader</span><span class="p">,</span> <span class="n">val_dataloader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generally, this method is not recommended.</span>
+
+<span class="sd">        Only when the ``mount_dataset`` method unmet demand, you can directly mount a ``train_dataloader`` and a</span>
+<span class="sd">        ``val_dataloader``.</span>
+
+<span class="sd">        :param train_dataloader: dataloader used for training.</span>
+<span class="sd">        :param val_dataloader: dataloader used for validating.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_dataloader</span> <span class="o">=</span> <span class="n">train_dataloader</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">val_dataloader</span> <span class="o">=</span> <span class="n">val_dataloader</span></div>
 
-<div class="viewcode-block" id="SupervisedTrainer.load_model"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimizer_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">parameter_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">parameter_path</span> <span class="o">=</span> <span class="s2">&quot;parameter.pth&quot;</span>
-            <span class="k">if</span> <span class="n">optimizer_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">optimizer_path</span> <span class="o">=</span> <span class="s2">&quot;optimizer.pth&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">parameter_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">optimizer_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">optimizer_path</span><span class="p">,</span> <span class="s2">&quot;optimizer.pth&quot;</span><span class="p">))</span></div>
-
-    <span class="k">def</span> <span class="nf">__split_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__split_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="n">dataset_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
@@ -263,7 +332,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
                 <span class="n">DataLoader</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
-<div class="viewcode-block" id="SupervisedTrainer.train"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SupervisedTrainer.train"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pre_train</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__train</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__post_train</span><span class="p">()</span>
@@ -272,7 +341,14 @@
             <span class="s2">&quot;val_acc&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">val_acc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="SupervisedTrainer.test"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dataloader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SupervisedTrainer.test"><a class="viewcode-back" href="../../../../utils.html#fedflow.utils.trainer.SupervisedTrainer.test">[docs]</a>    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dataloader</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculate the predict accuracy in dataset.</span>
+
+<span class="sd">        :param dataset: the dataset for predicting.</span>
+<span class="sd">        :param dataloader: if dataloader if not None, the ``dataset`` param will be ignored.</span>
+<span class="sd">        :return: a tuple ``(loss, correct, total)``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dataloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>

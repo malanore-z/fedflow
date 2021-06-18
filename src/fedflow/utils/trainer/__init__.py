@@ -2,6 +2,7 @@
 Trainers
 =========
 
+Some classes or methods for training.
 """
 __all__ = [
     "SupervisedTrainer"

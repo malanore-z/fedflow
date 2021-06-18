@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,11 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Schedule core</span>
 <span class="sd">==============</span>
+
+<span class="sd">The core of fedflow schedule.</span>
+
+<span class="sd">``GroupScheduler`` is responsible for the parallel operation of scheduling tasks.</span>
+<span class="sd">Generally, user should not use GroupScheduler directly.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -178,6 +186,7 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">ngpuinfo</span>
 <span class="kn">import</span> <span class="nn">psutil</span>
@@ -192,21 +201,46 @@
 
 
 <span class="k">class</span> <span class="nc">TaskHandler</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The handler of task process message.</span>
+<span class="sd">    It should be registered as default handler of MessageListener before every schedule round.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">main_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fedflow.task.main&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">TaskGroup</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a handler instance for specify group.</span>
+
+<span class="sd">        :param group: the task group in scheduling.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TaskHandler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">group</span>
 
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        handle task message.</span>
+
+<span class="sd">        :param source: the task id</span>
+<span class="sd">        :param cmd: the task action need be handled, in current version, the value is always ``update_status``</span>
+<span class="sd">        :param data: the payload data.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;update_status&quot;</span><span class="p">:</span>
             <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">get_task</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
             <span class="n">status</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} receive update status{</span><span class="si">%s</span><span class="s2">} signal&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">handle_status</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">handle_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        handle the status update of task.</span>
+
+<span class="sd">        :param task: the task which need update status.</span>
+<span class="sd">        :param status: the target status.</span>
+<span class="sd">        :param data: some extra data.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">EXCEPTION</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
             <span class="n">stage</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;stage&quot;</span><span class="p">]</span>
@@ -223,30 +257,58 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">move_task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__interrupt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">interrupt_from</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__interrupt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">,</span> <span class="n">interrupt_from</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When there is insufficient memory(or cuda memory) during the scheduling process, the task will be interrupt and</span>
+<span class="sd">        the status of task is set to ``TaskStatus.INTERRUPT``.</span>
+
+<span class="sd">        If interrupt occurs in ``load`` stage, the task process will be killed, and the status is set to</span>
+<span class="sd">        ``TaskStatus.AVAILABLE``. Then, the task is added to available task queue, and waiting for the next schedule.</span>
+
+<span class="sd">        If interrupt occurs in ``train`` stage, the task process will be reserved, and the status is set to</span>
+<span class="sd">        ``TaskStatus.WAITING``. Then, the task is added to waiting task queue, and waiting for the next scheduler.</span>
+
+<span class="sd">        The exception is if the maximum number of retries(``load`` and ``train`` stage are count separately) is reached,</span>
+<span class="sd">        the status of task is set to ``TaskStatus.EXCEPTION``, and the task process will be killed.</span>
+
+<span class="sd">        :param task: the task which interrupted.</span>
+<span class="sd">        :param interrupt_from: the stage occurs OOM(or cuda OOM), its value only can be &#39;load&#39; or &#39;train&#39;</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">interrupt_from</span> <span class="o">==</span> <span class="s2">&quot;LOAD&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">load_numbers</span> <span class="o">&lt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;scheduler.load-nretry&quot;</span><span class="p">):</span>
                 <span class="n">task</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">move_task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">AVAILABLE</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">task</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">report_exception</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;LoadNumbersExceed&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">report_exception</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;LoadNumbersExceed&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">move_task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">EXCEPTION</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">train_numbers</span> <span class="o">&lt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;scheduler.train-nretry&quot;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">move_task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">WAITING</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">task</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">report_exception</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="s2">&quot;TrainNumbersExceed&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">report_exception</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;TrainNumbersExceed&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">move_task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">EXCEPTION</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="GroupScheduler"><a class="viewcode-back" href="../../../core.html#fedflow.core.scheduler.GroupScheduler">[docs]</a><span class="k">class</span> <span class="nc">GroupScheduler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The scheduler of ``TaskGroup``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fedflow.scheduler&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GroupScheduler.schedule"><a class="viewcode-back" href="../../../core.html#fedflow.core.scheduler.GroupScheduler.schedule">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">TaskGroup</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">schedule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">TaskGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The entry of schedule.</span>
+
+<span class="sd">        This method is blocked.</span>
+
+<span class="sd">        :param group: the task group waiting for scheduling.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;schedule group #</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="n">MessageListener</span><span class="o">.</span><span class="n">register_default_handler</span><span class="p">(</span><span class="n">TaskHandler</span><span class="p">(</span><span class="n">group</span><span class="p">))</span>
 
@@ -317,14 +379,26 @@
         <span class="n">Mail</span><span class="o">.</span><span class="n">send_group_result</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">group_name</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">result</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GroupScheduler.cpu_free"><a class="viewcode-back" href="../../../core.html#fedflow.core.scheduler.GroupScheduler.cpu_free">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">cpu_free</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cpu_free</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        check cpu utilization.</span>
+
+<span class="sd">        :return: a bool value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cpu_precent</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_percent</span><span class="p">()</span>
         <span class="n">utilization_limit</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;utilization-limit.cpu&quot;</span><span class="p">)</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;CPU utilization: </span><span class="si">%.2f%%</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cpu_precent</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cpu_precent</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">utilization_limit</span></div>
 
 <div class="viewcode-block" id="GroupScheduler.memory_free"><a class="viewcode-back" href="../../../core.html#fedflow.core.scheduler.GroupScheduler.memory_free">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">memory_free</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">require_memory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">memory_free</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">require_memory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        check memory utilization</span>
+
+<span class="sd">        :param require_memory: the memory current task required. the type of ``require_memory`` can be int(the unit is</span>
+<span class="sd">            Byte) or str(number + unit, for example, &#39;123KB&#39;, &#39;456 MB&#39;, &#39;789MiB&#39;).</span>
+<span class="sd">        :return: a bool value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">require_memory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">require_memory</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;scheduler.default-memory&quot;</span><span class="p">)</span>
         <span class="n">require_memory</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_memory_value</span><span class="p">(</span><span class="n">require_memory</span><span class="p">)</span>
@@ -350,7 +424,14 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="GroupScheduler.assign_cuda"><a class="viewcode-back" href="../../../core.html#fedflow.core.scheduler.GroupScheduler.assign_cuda">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">assign_cuda</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">require_cuda_memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">assign_cuda</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">require_cuda_memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        assign a cuda device.</span>
+
+<span class="sd">        :param require_cuda_memory: the cuda memory current task required.</span>
+<span class="sd">        :param device: specify a device, then other device will be ignored.</span>
+<span class="sd">        :return: An integer represents the cuda id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">require_cuda_memory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">require_cuda_memory</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;scheduler.default-cuda-memory&quot;</span><span class="p">)</span>
         <span class="n">require_cuda_memory</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parse_memory_value</span><span class="p">(</span><span class="n">require_cuda_memory</span><span class="p">)</span>

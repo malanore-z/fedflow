@@ -88,13 +88,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -178,18 +181,32 @@
 <span id="fedflow-utils-package"></span><h1>fedflow.utils package<a class="headerlink" href="#module-fedflow.utils" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fedflow-utils">
 <h2>Fedflow utils<a class="headerlink" href="#fedflow-utils" title="Permalink to this headline">¶</a></h2>
+<p>Some utils for fedflow.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.utils.ModuleUtils">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.utils.</span></span><span class="sig-name descname"><span class="pre">ModuleUtils</span></span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.migrate_module">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">migrate_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.migrate_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.migrate_module" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">migrate_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.migrate_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.migrate_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>migrate a module from <code class="docutils literal notranslate"><span class="pre">src</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code>, and rename it to <code class="docutils literal notranslate"><span class="pre">dst_name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – the module source dir.</p></li>
+<li><p><strong>dst</strong> – target dir.</p></li>
+<li><p><strong>dst_name</strong> – new module name, the module name will keep if this param is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.import_module">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">import_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.import_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.import_module" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">import_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.import_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.import_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Import the module dynamically</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -205,69 +222,93 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.import_config">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">import_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.import_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.import_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.import_start">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">import_start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.import_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.import_start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.exists_module">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">exists_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.exists_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.exists_module" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">exists_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.exists_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.exists_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if module is exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>module</strong> – the module to be checked.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a bool value.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.ModuleUtils.get_name">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/fedflow/utils/module_utils.html#ModuleUtils.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.ModuleUtils.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of <code class="docutils literal notranslate"><span class="pre">obj</span></code> in <code class="docutils literal notranslate"><span class="pre">module</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – the module to found <code class="docutils literal notranslate"><span class="pre">obj</span></code>.</p></li>
+<li><p><strong>obj</strong> – the obj need to get name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a string value represent the name of <code class="docutils literal notranslate"><span class="pre">obj</span></code> or None if not found.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 <span class="target" id="module-fedflow.utils.data"></span><div class="section" id="data-utils">
 <h2>Data utils<a class="headerlink" href="#data-utils" title="Permalink to this headline">¶</a></h2>
+<p>Some classes or methods for preprocessing datasets.</p>
 </div>
 <span class="target" id="module-fedflow.utils.trainer"></span><div class="section" id="trainers">
 <h2>Trainers<a class="headerlink" href="#trainers" title="Permalink to this headline">¶</a></h2>
+<p>Some classes or methods for training.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fedflow.utils.trainer.</span></span><span class="sig-name descname"><span class="pre">SupervisedTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_optim_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda:0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A trainer used for supervised training by pytorch.</p>
+<p>After training of this trainer, there are 4 files will appeared in current dir:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>history.json: the data of history(contains loss and acc of train and validate).</p></li>
+<li><p>history.png: the chart of history</p></li>
+<li><p>parameter.pth: the parameters of model</p></li>
+<li><p>optimizer.pth: the parameters of optimizer</p></li>
+</ul>
+</div></blockquote>
 <dl class="py class">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History">
 <em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">History</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_acc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_acc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Record history data during training</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History.lr">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">lr</span></span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History.lr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 4</p>
+<dd><p>learning rate of every epoch</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History.train_acc">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">train_acc</span></span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History.train_acc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
+<dd><p>train accuracy of every epoch</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History.train_loss">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">train_loss</span></span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History.train_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dd><p>train loss of every epoch</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History.val_acc">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">val_acc</span></span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History.val_acc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 3</p>
+<dd><p>validate accuracy of every epoch</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.History.val_loss">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">val_loss</span></span><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.History.val_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
+<dd><p>validate loss of every epoch</p>
 </dd></dl>
 
 </dd></dl>
@@ -275,33 +316,103 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_model_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_optim_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cuda:0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dd><p>Construct a trainer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – an instance of <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>.</p></li>
+<li><p><strong>optimizer</strong> – an instance of pytorch optimizer.</p></li>
+<li><p><strong>criterion</strong> – loss function</p></li>
+<li><p><strong>lr_scheduler</strong> – an instance of <code class="docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler._LRScheduler</span></code> or
+<code class="docutils literal notranslate"><span class="pre">torch.optim.lr_scheduler.ReduceLROnPlateau</span></code></p></li>
+<li><p><strong>init_model_path</strong> – the init model parameters path.</p></li>
+<li><p><strong>init_optim_path</strong> – the init optimizer parameters path.</p></li>
+<li><p><strong>dataset</strong> – the datasets used for this trainer.</p></li>
+<li><p><strong>batch_size</strong> – the batch size</p></li>
+<li><p><strong>epoch</strong> – the epoch</p></li>
+<li><p><strong>epoch_action</strong> – <p>when every epoch finished, the epoch_action method will be called. In this method, you can
+update <code class="docutils literal notranslate"><span class="pre">lr</span></code> etc. The follow is an example of epoch_action:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">EpochAction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optim</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">super</span><span class="p">(</span><span class="n">SupervisedTrainer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">reduce</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">ReduceLROnPlateau</span><span class="p">(</span><span class="n">optim</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># The complete method signature is:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># def __call__(self, *, model, optimizer, criterion, lr_scheduler,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#               train_loss, train_acc, val_loss, val_acc, lr):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">reduce</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">val_acc</span><span class="p">)</span>
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>checkpoint_interval</strong> – the interval of save parameters, the trainer will not save parameters if this param
+if 0.</p></li>
+<li><p><strong>device</strong> – the device used for training.</p></li>
+<li><p><strong>console_out</strong> – redirect print.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.mount_dataset">
-<span class="sig-name descname"><span class="pre">mount_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.mount_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.mount_dataset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mount_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.mount_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.mount_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>mount dataset to this trainer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – the complete dataset or train dataset.</p></li>
+<li><p><strong>val_dataset</strong> – validate dataset, if it’s None, this method will split validate dataset from <code class="docutils literal notranslate"><span class="pre">dataset</span></code>.</p></li>
+<li><p><strong>val_ratio</strong> – the ratio of validate dataset when split.</p></li>
+<li><p><strong>batch_size</strong> – the batch size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.mount_dataloader">
-<span class="sig-name descname"><span class="pre">mount_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataloader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataloader</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.mount_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.mount_dataloader" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.load_model">
-<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameter_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.load_model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mount_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_dataloader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_dataloader</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.mount_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.mount_dataloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generally, this method is not recommended.</p>
+<p>Only when the <code class="docutils literal notranslate"><span class="pre">mount_dataset</span></code> method unmet demand, you can directly mount a <code class="docutils literal notranslate"><span class="pre">train_dataloader</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">val_dataloader</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_dataloader</strong> – dataloader used for training.</p></li>
+<li><p><strong>val_dataloader</strong> – dataloader used for validating.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.train" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.train" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fedflow.utils.trainer.SupervisedTrainer.test">
-<span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><a class="reference internal" href="_modules/fedflow/utils/trainer/supervised_trainer.html#SupervisedTrainer.test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fedflow.utils.trainer.SupervisedTrainer.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate the predict accuracy in dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – the dataset for predicting.</p></li>
+<li><p><strong>dataloader</strong> – if dataloader if not None, the <code class="docutils literal notranslate"><span class="pre">dataset</span></code> param will be ignored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple <code class="docutils literal notranslate"><span class="pre">(loss,</span> <span class="pre">correct,</span> <span class="pre">total)</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

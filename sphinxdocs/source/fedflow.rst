@@ -3,19 +3,18 @@ fedflow package
 
 .. automodule:: fedflow
    :members: FedFlow
-   :undoc-members:
-   :show-inheritance:
 
 .. automodule:: fedflow.config
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :no-undoc-members:
+   :no-show-inheritance:
 
 .. automodule:: fedflow.context
    :members:
-   :undoc-members:
-   :show-inheritance:
+   :no-undoc-members:
+   :no-show-inheritance:
 
 .. automodule:: fedflow.units
    :members:
+   :no-undoc-members:
    :show-inheritance:

@@ -95,6 +95,12 @@ class ByteUnits(Units):
 
     @classmethod
     def parse(cls, s: str):
+        """
+        parse a str to a tuple ``(int_value, units)``
+
+        :param s:
+        :return:
+        """
         if s is None:
             raise ValueError("s cannot be None")
         s = s.strip()

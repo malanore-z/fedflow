@@ -1,6 +1,10 @@
 """
 Task
 =====
+
+The basic class of task.
+
+User define task by inherit the ``Task`` class and overwrite ``load`` and ``train`` methods.
 """
 
 __all__ = [
@@ -25,20 +29,25 @@ from fedflow.core.message import Message, MessageListener
 
 class TaskStatus(enum.Enum):
 
-    UNKNOWN = 0
-    INIT = 1
-    AVAILABLE = 2
-    LOADING = 3
-    WAITING = 4
-    TRAINING = 5
-    FINISHED = 6
-    EXITED = 7
-    EXCEPTION = 8
-    INTERRUPT = 9
+    """
+    The task status enum.
+    """
+
+    UNKNOWN = 0         #: the error status
+    INIT = 1            #: construct a task instance and hasn't started scheduling
+    AVAILABLE = 2       #: start task subprocess
+    LOADING = 3         #: start loading
+    WAITING = 4         #: loaded successfully, and waiting for training
+    TRAINING = 5        #: start training
+    FINISHED = 6        #: training successfully
+    EXITED = 7          #: subprocess exited
+    EXCEPTION = 8       #: caught some exception while running
+    INTERRUPT = 9       #: caught OOM(or cuda OOM) exception while running
 
 
 class Task(object):
     """
+    the basic class of all user task
     """
 
     main_logger = logging.getLogger("fedflow.task.main")
@@ -49,11 +58,12 @@ class Task(object):
                  estimate_cuda_memory: Union[int, str] = None,
                  device=None):
         """
+        Construct an instance of task
 
-        :param task_id:
-        :param estimate_memory:
-        :param estimate_cuda_memory:
-        :param device:
+        :param task_id: task unique id, default is uuid string.
+        :param estimate_memory: maximum memory expected to be used.
+        :param estimate_cuda_memory: maximum cuda memory expected to be used.
+        :param device: specify device the task used, if it's None, the device will be decided by scheduler.
         """
         super(Task, self).__init__()
         self.task_id = task_id if task_id is not None else str(uuid.uuid4())
@@ -63,7 +73,7 @@ class Task(object):
         self.load_numbers = 0
         self.train_numbers = 0
 
-        self.workdir = None
+        self.__workdir = None
         self.load_time = -1
         self.train_time = -1
 
@@ -73,11 +83,35 @@ class Task(object):
         self.__status = TaskStatus.INIT
 
     @property
+    def workdir(self) -> str:
+        """
+        The workdir of task.
+
+        This property only can be used after task process was started.
+
+        :return:
+        """
+        if self.__workdir is None:
+            raise ValueError("The workdir field is not available.")
+        return self.__workdir
+
+    @property
     def status(self) -> TaskStatus:
+        """
+        The status of task.
+
+        :return:
+        """
         return self.__status
 
     @status.setter
     def status(self, value: Union[int, str, TaskStatus]) -> None:
+        """
+        status setter
+
+        :param value: a int/str/TaskStatus value represents the status
+        :return:
+        """
         try:
             if isinstance(value, int):
                 s = TaskStatus(value)
@@ -97,21 +131,40 @@ class Task(object):
     # ======================================================================
 
     def start(self) -> None:
+        """
+        Start task process
+        *This method cannot be called by user.*
+
+        :return:
+        """
         self.main_logger.info("{%s} start.", self.task_id)
-        self.workdir = os.path.join(os.curdir, str(self.task_id))
-        self.workdir = os.path.abspath(self.workdir)
+        self.__workdir = os.path.join(os.curdir, str(self.task_id))
+        self.__workdir = os.path.abspath(self.__workdir)
         pipe = multiprocessing.Pipe()
         self.__pipe = pipe[0]
         self.__process = multiprocessing.Process(target=self.run, args=(pipe[1], MessageListener.mq()))
         self.__process.start()
 
     def start_load(self) -> None:
+        """
+        Start loading.
+        *This method cannot be called by user.*
+
+        :return:
+        """
         self.load_numbers += 1
         self.main_logger.info("{%s} start load. retry time: %d", self.task_id, self.load_numbers)
         msg = Message(source="", cmd="LOAD", data={})
         self.__pipe.send(msg)
 
     def start_train(self, device: str) -> None:
+        """
+        Start training.
+        *This method cannot be called by user.*
+
+        :param device: the device this task will use.
+        :return:
+        """
         self.train_numbers += 1
         self.main_logger.info("{%s} start train. retry time: %d", self.task_id, self.train_numbers)
         msg = Message(source="", cmd="TRAIN", data={
@@ -120,6 +173,12 @@ class Task(object):
         self.__pipe.send(msg)
 
     def exit(self) -> None:
+        """
+        Exit task process.
+        *This method cannot be called by user.*
+
+        :return:
+        """
         if self.__pipe is None or self.__pipe.closed:
             self.main_logger.warning("{%s} Try to exit a closed process.", self.task_id)
             return
@@ -128,7 +187,12 @@ class Task(object):
         self.__pipe.close()
         self.main_logger.info("{%s} exit.", self.task_id)
 
-    def is_alive(self):
+    def is_alive(self) -> bool:
+        """
+        If the task process is alive.
+
+        :return: a bool value
+        """
         return self.__process is not None and self.__process.is_alive()
 
     # ======================================================================
@@ -141,6 +205,7 @@ class Task(object):
     def run(self, pipe, mq) -> None:
         """
         subprocess code entry
+
         :param pipe: connection pipe between main process task and subprocess task
         :param mq: connection queue between main process scheduler and subprocess tasks
         :return:
@@ -148,15 +213,16 @@ class Task(object):
         self.sub_logger.info("{%s} run.", self.task_id)
         self.__pipe = pipe
         self.__mq = mq
-        self.workdir = os.path.join(os.curdir, str(self.task_id))
-        self.workdir = os.path.abspath(self.workdir)
-        os.makedirs(self.workdir, exist_ok=True)
-        os.chdir(self.workdir)
+        self.__workdir = os.path.join(os.curdir, str(self.task_id))
+        self.__workdir = os.path.abspath(self.__workdir)
+        os.makedirs(self.__workdir, exist_ok=True)
+        os.chdir(self.__workdir)
         self.__listen()
 
     def __listen(self) -> None:
         """
         listen command from main process
+
         :return:
         """
         self.__update_status(TaskStatus.AVAILABLE)
@@ -181,17 +247,19 @@ class Task(object):
         """
         User must overwrite this method in subclass.
         When implement subclass, user should put all loading action(such as load datasets) in this method.
+
         :return:
         """
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def train(self) -> dict:
+    def train(self, device: str) -> dict:
         """
-        User muest overwrite this method in subclass.
+        User must overwrite this method in subclass.
         When implement subclass, user should put all computer action(such as train or predict) in this method.
-        In this method, self.device is usable, user can load data to specify cuda by use self.device field.
-        :return:
+
+        :param device: the device this task will use.
+        :return: a dict represent some properties used for reporting.
         """
         raise NotImplementedError()
 
@@ -221,7 +289,7 @@ class Task(object):
         try:
             self.__update_status(TaskStatus.TRAINING)
             start_time = time.time()
-            data = self.train()
+            data = self.train(self.device)
             self.train_time = int(1000 * (time.time() - start_time))
             if type(data) != dict:
                 data = {}

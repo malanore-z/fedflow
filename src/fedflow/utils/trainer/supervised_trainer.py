@@ -1,3 +1,10 @@
+"""
+Supervised Trainer
+======================
+
+A trainer used for supervised training by pytorch.
+"""
+
 __all__ = [
     "SupervisedTrainer"
 ]
@@ -16,7 +23,25 @@ from torch.utils.data import random_split, DataLoader
 
 class SupervisedTrainer(object):
 
+    """
+    A trainer used for supervised training by pytorch.
+
+    After training of this trainer, there are 4 files will appeared in current dir:
+
+        * history.json: the data of history(contains loss and acc of train and validate).
+        * history.png: the chart of history
+        * parameter.pth: the parameters of model
+        * optimizer.pth: the parameters of optimizer
+
+    """
+
     History = namedtuple("History", ["train_loss", "train_acc", "val_loss", "val_acc", "lr"])
+    History.__doc__ = "Record history data during training"
+    History.train_acc.__doc__ = "train accuracy of every epoch"
+    History.val_acc.__doc__ = "validate accuracy of every epoch"
+    History.train_loss.__doc__ = "train loss of every epoch"
+    History.val_loss.__doc__ = "validate loss of every epoch"
+    History.lr.__doc__ = "learning rate of every epoch"
 
     def __init__(self, model, optimizer, criterion, lr_scheduler=None, *,
                  init_model_path=None,
@@ -28,6 +53,38 @@ class SupervisedTrainer(object):
                  checkpoint_interval=10,
                  device="cuda:0",
                  console_out=None):
+        """
+        Construct a trainer.
+
+        :param model: an instance of ``torch.nn.Module``.
+        :param optimizer: an instance of pytorch optimizer.
+        :param criterion: loss function
+        :param lr_scheduler: an instance of ``torch.optim.lr_scheduler._LRScheduler`` or
+            ``torch.optim.lr_scheduler.ReduceLROnPlateau``
+        :param init_model_path: the init model parameters path.
+        :param init_optim_path: the init optimizer parameters path.
+        :param dataset: the datasets used for this trainer.
+        :param batch_size: the batch size
+        :param epoch: the epoch
+        :param epoch_action: when every epoch finished, the epoch_action method will be called. In this method, you can
+            update ``lr`` etc. The follow is an example of epoch_action:
+
+            >>> class EpochAction(object):
+            >>>     def __init__(self, optim):
+            >>>         super(SupervisedTrainer, self).__init__()
+            >>>         self.reduce = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, mode="max")
+            >>>
+            >>>     # The complete method signature is:
+            >>>     # def __call__(self, *, model, optimizer, criterion, lr_scheduler,
+            >>>     #               train_loss, train_acc, val_loss, val_acc, lr):
+            >>>     def __call__(self, *, val_acc, *args, **kwargs):
+            >>>         self.reduce.step(val_acc)
+
+        :param checkpoint_interval: the interval of save parameters, the trainer will not save parameters if this param
+            if 0.
+        :param device: the device used for training.
+        :param console_out: redirect print.
+        """
         super(SupervisedTrainer, self).__init__()
         self.model = model
         self.optimizer = optimizer
@@ -57,7 +114,16 @@ class SupervisedTrainer(object):
         self.start_time = int(time.time())
         self.history = self.History([], [], [], [], [])
 
-    def mount_dataset(self, dataset, val_dataset=None, *, val_ratio=0.3, batch_size=32):
+    def mount_dataset(self, dataset, val_dataset=None, *, val_ratio=0.3, batch_size=32) -> None:
+        """
+        mount dataset to this trainer.
+
+        :param dataset: the complete dataset or train dataset.
+        :param val_dataset: validate dataset, if it's None, this method will split validate dataset from ``dataset``.
+        :param val_ratio: the ratio of validate dataset when split.
+        :param batch_size: the batch size.
+        :return:
+        """
         if dataset is None:
             raise ValueError("dataset cannot be None.")
         if batch_size is not None:
@@ -70,21 +136,21 @@ class SupervisedTrainer(object):
             self.train_dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
             self.val_dataloader = DataLoader(val_dataset, batch_size=self.batch_size, shuffle=True)
 
-    def mount_dataloader(self, train_dataloader, val_dataloader):
+    def mount_dataloader(self, train_dataloader, val_dataloader) -> None:
+        """
+        Generally, this method is not recommended.
+
+        Only when the ``mount_dataset`` method unmet demand, you can directly mount a ``train_dataloader`` and a
+        ``val_dataloader``.
+
+        :param train_dataloader: dataloader used for training.
+        :param val_dataloader: dataloader used for validating.
+        :return:
+        """
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
 
-    def load_model(self, parameter_path=None, optimizer_path=None):
-        if parameter_path is None:
-            parameter_path = "parameter.pth"
-            if optimizer_path is None:
-                optimizer_path = "optimizer.pth"
-        self.model.load_state_dict(torch.load(parameter_path, map_location=self.device))
-        self.model = self.model.to(self.device)
-        if optimizer_path is not None:
-            self.optimizer.load_state_dict(torch.load(optimizer_path, "optimizer.pth"))
-
-    def __split_dataset(self, dataset, val_ratio=0.3):
+    def __split_dataset(self, dataset, val_ratio=0.3) -> tuple:
         if dataset is None:
             return None, None
         dataset_len = len(dataset)
@@ -94,7 +160,7 @@ class SupervisedTrainer(object):
         return (DataLoader(t, batch_size=self.batch_size, shuffle=True),
                 DataLoader(v, batch_size=self.batch_size, shuffle=True))
 
-    def train(self):
+    def train(self) -> dict:
         self.__pre_train()
         self.__train()
         self.__post_train()
@@ -103,7 +169,14 @@ class SupervisedTrainer(object):
             "val_acc": self.history.val_acc[-1]
         }
 
-    def test(self, dataset=None, *, dataloader=None):
+    def test(self, dataset=None, *, dataloader=None) -> tuple:
+        """
+        calculate the predict accuracy in dataset.
+
+        :param dataset: the dataset for predicting.
+        :param dataloader: if dataloader if not None, the ``dataset`` param will be ignored.
+        :return: a tuple ``(loss, correct, total)``
+        """
         if dataloader is None:
             dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
         with torch.no_grad():

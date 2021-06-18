@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Mail Entry</span>
 <span class="sd">============</span>
+
+<span class="sd">The interface exposed by the mail package.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -188,10 +193,23 @@
 
 <div class="viewcode-block" id="Mail"><a class="viewcode-back" href="../../../mail.html#fedflow.mail.Mail">[docs]</a><span class="k">class</span> <span class="nc">Mail</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The entry mail class.</span>
+
+<span class="sd">    All code outside of this package should only use this class to send mail.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fedflow&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Mail.send_group_result"><a class="viewcode-back" href="../../../mail.html#fedflow.mail.Mail.send_group_result">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">send_group_result</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_group_result</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        send report of a group.</span>
+
+<span class="sd">        :param name: group name</span>
+<span class="sd">        :param result: the result need to be reported.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">html</span> <span class="o">=</span> <span class="n">group_template</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
         <span class="n">message</span> <span class="o">=</span> <span class="n">MIMEText</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
         <span class="n">message</span><span class="p">[</span><span class="s2">&quot;Subject&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="s2">&quot;Fedflow </span><span class="si">%s</span><span class="s2"> report&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>

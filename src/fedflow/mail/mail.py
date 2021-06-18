@@ -1,6 +1,8 @@
 """
 Mail Entry
 ============
+
+The interface exposed by the mail package.
 """
 
 __all__ = [
@@ -19,10 +21,23 @@ from fedflow.mail.send_mail import send_mail
 
 class Mail(object):
 
+    """
+    The entry mail class.
+
+    All code outside of this package should only use this class to send mail.
+    """
+
     logger = logging.getLogger("fedflow")
 
     @classmethod
-    def send_group_result(cls, name, result: dict):
+    def send_group_result(cls, name: str, result: dict) -> None:
+        """
+        send report of a group.
+
+        :param name: group name
+        :param result: the result need to be reported.
+        :return:
+        """
         html = group_template(name, result)
         message = MIMEText(html, "html", "utf-8")
         message["Subject"] = Header("Fedflow %s report" % name, "utf-8")

@@ -87,13 +87,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">介绍</span></p>
+              <p class="caption"><span class="caption-text">开始</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../start.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../start.html">开始使用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config.html">配置</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component.html">组件</a></li>
 </ul>
 <p class="caption"><span class="caption-text">示例</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mnist_example.html">Fmnist示例</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cifar_example.html">Cifar10示例</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>
@@ -170,6 +173,10 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Task</span>
 <span class="sd">=====</span>
+
+<span class="sd">The basic class of task.</span>
+
+<span class="sd">User define task by inherit the ``Task`` class and overwrite ``load`` and ``train`` methods.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -194,20 +201,25 @@
 
 <div class="viewcode-block" id="TaskStatus"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.TaskStatus">[docs]</a><span class="k">class</span> <span class="nc">TaskStatus</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
 
-    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">INIT</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">AVAILABLE</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">LOADING</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">WAITING</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="n">TRAINING</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">FINISHED</span> <span class="o">=</span> <span class="mi">6</span>
-    <span class="n">EXITED</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">EXCEPTION</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">INTERRUPT</span> <span class="o">=</span> <span class="mi">9</span></div>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The task status enum.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>         <span class="c1">#: the error status</span>
+    <span class="n">INIT</span> <span class="o">=</span> <span class="mi">1</span>            <span class="c1">#: construct a task instance and hasn&#39;t started scheduling</span>
+    <span class="n">AVAILABLE</span> <span class="o">=</span> <span class="mi">2</span>       <span class="c1">#: start task subprocess</span>
+    <span class="n">LOADING</span> <span class="o">=</span> <span class="mi">3</span>         <span class="c1">#: start loading</span>
+    <span class="n">WAITING</span> <span class="o">=</span> <span class="mi">4</span>         <span class="c1">#: loaded successfully, and waiting for training</span>
+    <span class="n">TRAINING</span> <span class="o">=</span> <span class="mi">5</span>        <span class="c1">#: start training</span>
+    <span class="n">FINISHED</span> <span class="o">=</span> <span class="mi">6</span>        <span class="c1">#: training successfully</span>
+    <span class="n">EXITED</span> <span class="o">=</span> <span class="mi">7</span>          <span class="c1">#: subprocess exited</span>
+    <span class="n">EXCEPTION</span> <span class="o">=</span> <span class="mi">8</span>       <span class="c1">#: caught some exception while running</span>
+    <span class="n">INTERRUPT</span> <span class="o">=</span> <span class="mi">9</span>       <span class="c1">#: caught OOM(or cuda OOM) exception while running</span></div>
 
 
 <div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    the basic class of all user task</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">main_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fedflow.task.main&quot;</span><span class="p">)</span>
@@ -218,11 +230,12 @@
                  <span class="n">estimate_cuda_memory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct an instance of task</span>
 
-<span class="sd">        :param task_id:</span>
-<span class="sd">        :param estimate_memory:</span>
-<span class="sd">        :param estimate_cuda_memory:</span>
-<span class="sd">        :param device:</span>
+<span class="sd">        :param task_id: task unique id, default is uuid string.</span>
+<span class="sd">        :param estimate_memory: maximum memory expected to be used.</span>
+<span class="sd">        :param estimate_cuda_memory: maximum cuda memory expected to be used.</span>
+<span class="sd">        :param device: specify device the task used, if it&#39;s None, the device will be decided by scheduler.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span> <span class="o">=</span> <span class="n">task_id</span> <span class="k">if</span> <span class="n">task_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
@@ -232,7 +245,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load_numbers</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_numbers</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
@@ -242,11 +255,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__status</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">INIT</span></div>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">workdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The workdir of task.</span>
+
+<span class="sd">        This property only can be used after task process was started.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The workdir field is not available.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskStatus</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The status of task.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__status</span>
 
     <span class="nd">@status</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        status setter</span>
+
+<span class="sd">        :param value: a int/str/TaskStatus value represents the status</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">TaskStatus</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -266,21 +303,40 @@
     <span class="c1"># ======================================================================</span>
 
 <div class="viewcode-block" id="Task.start"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start task process</span>
+<span class="sd">        *This method cannot be called by user.*</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} start.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span><span class="p">)</span>
         <span class="n">pipe</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pipe</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__process</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">pipe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">MessageListener</span><span class="o">.</span><span class="n">mq</span><span class="p">()))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Task.start_load"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.start_load">[docs]</a>    <span class="k">def</span> <span class="nf">start_load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start loading.</span>
+<span class="sd">        *This method cannot be called by user.*</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_numbers</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} start load. retry time: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_numbers</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s2">&quot;LOAD&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Task.start_train"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.start_train">[docs]</a>    <span class="k">def</span> <span class="nf">start_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start training.</span>
+<span class="sd">        *This method cannot be called by user.*</span>
+
+<span class="sd">        :param device: the device this task will use.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_numbers</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} start train. retry time: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_numbers</span><span class="p">)</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="s2">&quot;TRAIN&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span>
@@ -289,6 +345,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Task.exit"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exit task process.</span>
+<span class="sd">        *This method cannot be called by user.*</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} Try to exit a closed process.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span>
             <span class="k">return</span>
@@ -297,7 +359,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">main_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} exit.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.is_alive"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Task.is_alive"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the task process is alive.</span>
+
+<span class="sd">        :return: a bool value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process</span><span class="o">.</span><span class="n">is_alive</span><span class="p">()</span></div>
 
     <span class="c1"># ======================================================================</span>
@@ -310,6 +377,7 @@
 <div class="viewcode-block" id="Task.run"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipe</span><span class="p">,</span> <span class="n">mq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        subprocess code entry</span>
+
 <span class="sd">        :param pipe: connection pipe between main process task and subprocess task</span>
 <span class="sd">        :param mq: connection queue between main process scheduler and subprocess tasks</span>
 <span class="sd">        :return:</span>
@@ -317,15 +385,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sub_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;{</span><span class="si">%s</span><span class="s2">} run.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span> <span class="o">=</span> <span class="n">pipe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mq</span> <span class="o">=</span> <span class="n">mq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workdir</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workdir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__workdir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__listen</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">__listen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        listen command from main process</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__update_status</span><span class="p">(</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">AVAILABLE</span><span class="p">)</span>
@@ -350,17 +419,19 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        User must overwrite this method in subclass.</span>
 <span class="sd">        When implement subclass, user should put all loading action(such as load datasets) in this method.</span>
+
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Task.train"><a class="viewcode-back" href="../../../core.html#fedflow.core.task.Task.train">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        User muest overwrite this method in subclass.</span>
+<span class="sd">        User must overwrite this method in subclass.</span>
 <span class="sd">        When implement subclass, user should put all computer action(such as train or predict) in this method.</span>
-<span class="sd">        In this method, self.device is usable, user can load data to specify cuda by use self.device field.</span>
-<span class="sd">        :return:</span>
+
+<span class="sd">        :param device: the device this task will use.</span>
+<span class="sd">        :return: a dict represent some properties used for reporting.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
@@ -390,7 +461,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__update_status</span><span class="p">(</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">TRAINING</span><span class="p">)</span>
             <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">train_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>

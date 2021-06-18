@@ -1,6 +1,8 @@
 """
-Send mail core method
+Send mail core methods
 ======================
+
+Some methods used inside the mail package to actually send mail.
 """
 
 __all__ = [
@@ -21,6 +23,12 @@ def __format_addr(name, addr):
 
 
 def send_mail(message: MIMEText):
+    """
+    Send ``message`` to specify email address.
+
+    :param message: the message to be sent.
+    :return:
+    """
     try:
         server_host = Config.get_property("smtp.server-host")
         server_port = Config.get_property("smtp.server-port")
@@ -45,22 +53,3 @@ def send_mail(message: MIMEText):
         return True
     except Exception as e:
         print(e)
-
-
-if __name__ == "__main__":
-    group_html = """<div style="width: 80%%; margin-left: 10%%">
-        <h3>Group #1 Finished</h3>
-        <p>20 tasks total, 18 successful, 2 failed.</p>
-        <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=1)" width="100%%" color=#987cb9 SIZE=3>
-        <div>
-            <p>Successful:</p>
-            %s
-        </div>
-        <div>
-            <p>Exception:</p>
-            %s
-        </div>
-    </div>"""
-    message = MIMEText(group_html, "html", "utf-8")
-    message["Subject"] = "TEST"
-    print(send_mail(message))

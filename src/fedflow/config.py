@@ -1,6 +1,8 @@
 """
 Config APIs
 ===========
+
+All the others codes should use ``Config`` to get fedflow config properties.
 """
 
 __all__ = [
@@ -22,7 +24,13 @@ class Config(object):
     __readonly_props = {}
 
     @classmethod
-    def load(cls, path=None):
+    def load(cls, path: str =None) -> None:
+        """
+        load config properties from disk file.
+
+        :param path: config file path, if it's None, will load default config file.
+        :return:
+        """
         if path is None:
             path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "config.yaml")
             with open(path) as f:
@@ -36,14 +44,26 @@ class Config(object):
             cls.set_property("workdir", workdir)
 
     @classmethod
-    def generate_config(cls, path=None):
+    def generate_config(cls, path: str =None) -> None:
+        """
+        generate config file in ``path``.
+
+        :param path: the config file path, if it's None, will be replaced by './config.yaml'.
+        :return:
+        """
         if path is None:
             path = "config.yaml"
         src_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "config.yaml")
         shutil.copy(src_path, path)
 
     @classmethod
-    def set_config(cls, d: dict):
+    def set_config(cls, d: dict) -> None:
+        """
+        Batch update config properties. Generally, this method is not recommend.
+
+        :param d: a dict represent config properties.
+        :return:
+        """
         cls.__props = d.copy()
 
     @classmethod

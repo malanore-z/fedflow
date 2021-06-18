@@ -1,3 +1,9 @@
+"""
+Fedflow entry
+==============
+
+"""
+
 __all__ = [
     "FedFlow"
 ]
@@ -20,22 +26,19 @@ class FedFlow(object):
 
     groups = []
 
-    def __init__(self):
-        super(FedFlow, self).__init__()
-
     @classmethod
-    def add_group(cls, group: TaskGroup):
+    def add_group(cls, group: TaskGroup) -> None:
         """
         Add a task group to flow.
 
-        :param group:
+        :param group: an instance of ``TaskGroup``
         :return:
         """
         cls.groups.append(group)
         group.index = len(cls.groups)
 
     @classmethod
-    def start(cls):
+    def start(cls) -> None:
         """
         Start schedule tasks
 

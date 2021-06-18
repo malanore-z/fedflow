@@ -24,4 +24,18 @@ setuptools.setup(
     package_data={'': ['resources/*']},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.4",
+    install_requires=[
+        "ngpuinfo==0.1.0",
+        "psutil",
+        "PyYAML",
+        "numpy",
+        "matplotlib"
+    ],
+    extras_requires={
+        "pytorch": [
+            "torch>=1.4.0",
+            "torchvision>=0.5.0"
+        ]
+    }
+
 )
