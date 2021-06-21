@@ -5,7 +5,7 @@ import torch.nn as nn
 from fedflow import Task
 from fedflow.utils.trainer import SupervisedTrainer
 from torch.optim import SGD
-from torch.optim.lr_scheduler import LambdaLR
+from torch.optim.lr_scheduler import MultiStepLR
 
 from cifar_dataset import CifarDataset
 from lenet5 import LeNet5
@@ -21,11 +21,11 @@ class TrainTask(Task):
     def load(self) -> None:
         self.model = LeNet5()
         self.optimizer = SGD(self.model.parameters(), lr=0.1)
-        self.lr_scheduler = LambdaLR(self.optimizer, lambda last_epoch: 0.99 ** last_epoch if last_epoch > 0 else 1)
+        self.lr_scheduler = MultiStepLR(self.optimizer, [20, 40, 60, 80])
         self.criterion = nn.CrossEntropyLoss()
         # Load dataset
         sample_path = PurePosixPath(self.split_task.workdir, "sample-%s.csv" % self.task_id).as_posix()
-        df = pd.read_csv(sample_path, header=False)
+        df = pd.read_csv(sample_path, header=None)
         data = df.values.tolist()
         self.dataset = CifarDataset(data)
 
@@ -37,6 +37,7 @@ class TrainTask(Task):
         self.trainer = SupervisedTrainer(self.model, self.optimizer, self.criterion, self.lr_scheduler,
                                          epoch=100,
                                          device=device,
-                                         init_model_path=pre_model_path)
+                                         init_model_path=pre_model_path,
+                                         console_out="console.out")
         self.trainer.mount_dataset(self.dataset)
         return self.trainer.train()

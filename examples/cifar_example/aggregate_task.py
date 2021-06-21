@@ -25,7 +25,7 @@ class AggregateTask(Task):
     def train(self, device) -> dict:
         for t in self.tasks:
             task: Task = t
-            path = PurePosixPath(task.workdir, "parameter.pth")
+            path = PurePosixPath(task.workdir, "parameter.pth").as_posix()
             self.parameters.append(torch.load(path, map_location=device))
 
         avg_parameter = self.parameters[0]
@@ -48,7 +48,7 @@ class AggregateTask(Task):
 
         for i in range(10):
             sample_path = PurePosixPath(self.split_task.workdir, "sample-%s.csv" % self.task_id).as_posix()
-            df = pd.read_csv(sample_path, header=False)
+            df = pd.read_csv(sample_path, header=None)
             data = df.values.tolist()
             dataset = CifarDataset(data)
             loss, correct, total = trainer.test(dataset)

@@ -32,7 +32,7 @@ class CifarDataset(Dataset):
 
     def read_imgs(self, data):
         for d in data:
-            path = PurePosixPath(CIFAR_ROOT, d[0])
+            path = PurePosixPath(CIFAR_ROOT, d[0]).as_posix()
             img = Image.open(path)
             self.imgs.append(img.copy())
             self.labels.append(d[1])
