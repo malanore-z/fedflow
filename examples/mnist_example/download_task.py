@@ -17,6 +17,6 @@ class DownloadTask(Task):
                         transforms.Normalize((0.13066062,), (0.30810776,))
                     ]))
 
-    def train(self) -> None:
+    def train(self, device) -> None:
         # Nothing to do
         pass
