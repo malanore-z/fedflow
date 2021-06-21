@@ -1,4 +1,4 @@
-from pathlib import PurePosixPath
+import os
 
 import pandas as pd
 import torch.nn as nn
@@ -20,18 +20,18 @@ class TrainTask(Task):
 
     def load(self) -> None:
         self.model = LeNet5()
-        self.optimizer = SGD(self.model.parameters(), lr=0.1)
-        self.lr_scheduler = MultiStepLR(self.optimizer, [20, 40, 60, 80])
+        self.optimizer = SGD(self.model.parameters(), lr=0.05)
+        self.lr_scheduler = MultiStepLR(self.optimizer, [10, 30, 60, 90])
         self.criterion = nn.CrossEntropyLoss()
         # Load dataset
-        sample_path = PurePosixPath(self.split_task.workdir, "sample-%s.csv" % self.task_id).as_posix()
+        sample_path = os.path.join(self.split_task.workdir, "sample-%s.csv" % self.task_id)
         df = pd.read_csv(sample_path, header=None)
         data = df.values.tolist()
         self.dataset = CifarDataset(data)
 
     def train(self, device: str) -> dict:
         if self.aggregate_task is not None:
-            pre_model_path = PurePosixPath(self.aggregate_task.workdir, "aggregate.pth").as_posix()
+            pre_model_path = os.path.join(self.aggregate_task.workdir, "aggregate.pth")
         else:
             pre_model_path = None
         self.trainer = SupervisedTrainer(self.model, self.optimizer, self.criterion, self.lr_scheduler,

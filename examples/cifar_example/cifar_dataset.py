@@ -1,4 +1,4 @@
-from pathlib import PurePosixPath
+import os
 
 from PIL import Image
 from torch.utils.data import Dataset
@@ -32,7 +32,7 @@ class CifarDataset(Dataset):
 
     def read_imgs(self, data):
         for d in data:
-            path = PurePosixPath(CIFAR_ROOT, d[0]).as_posix()
+            path = os.path.join(CIFAR_ROOT, d[0])
             img = Image.open(path)
             self.imgs.append(img.copy())
             self.labels.append(d[1])
