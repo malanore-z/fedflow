@@ -40,9 +40,9 @@ class TrainTask(Task):
                                          init_model_path=pre_model_path,
                                          console_out="console.out")
 
-        _, correct, total = self.trainer.test(self.dataset)
+        _, correct, total = self.trainer.test(pre_model_path, self.dataset)
         ret = {
-            "init_acc": correct / total
+            "init_acc": "%.2f%%(%d/%d)" % (100 * correct / total, correct, total)
         }
 
         self.trainer.mount_dataset(self.dataset)

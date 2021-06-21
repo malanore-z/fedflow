@@ -51,21 +51,13 @@ class AggregateTask(Task):
             df = pd.read_csv(sample_path, header=None)
             data = df.values.tolist()
             dataset = CifarDataset(data)
-            loss, correct, total = trainer.test(dataset)
+            loss, correct, total = trainer.test("aggregate.pth", dataset)
 
-            ret[str(i)] = {
-                "correct": correct,
-                "total": total,
-                "acc": correct / total
-            }
+            ret[str(i)] = "%.2f%%(%d/%d)" % (100 * correct / total, correct, total)
 
             all_correct += correct
             all_total += total
 
-        ret["ALL"] = {
-            "correct": all_correct,
-            "total": all_total,
-            "acc": all_correct / all_total
-        }
+        ret["ALL"] = "%.2f%%(%d/%d)" % (100 * all_correct / all_total, all_correct, all_total)
 
         return ret

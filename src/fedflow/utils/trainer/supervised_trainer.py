@@ -169,7 +169,7 @@ class SupervisedTrainer(object):
             "val_acc": self.history.val_acc[-1]
         }
 
-    def test(self, dataset=None, *, dataloader=None) -> tuple:
+    def test(self, init_model_path, dataset=None, *, dataloader=None) -> tuple:
         """
         calculate the predict accuracy in dataset.
 
@@ -177,29 +177,43 @@ class SupervisedTrainer(object):
         :param dataloader: if dataloader if not None, the ``dataset`` param will be ignored.
         :return: a tuple ``(loss, correct, total)``
         """
+        self.console_out.write("[INFO] Test started.")
         if dataloader is None:
             dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+
+        if init_model_path is None:
+            self.console_out.write("[WARN] test model has no pre-trained parameters.")
+        else:
+            if os.path.exists(init_model_path):
+                self.console_out.write("[INFO] load model parameters.\n")
+            else:
+                self.console_out.write("[INFO] model parameters not exists.\n")
+
         self.model = self.model.to(self.device)
         with torch.no_grad():
             loss, correct, total = self._epoch_train(dataloader)
+        self.console_out.write("[INFO] Test ended.")
         return loss, correct, total
 
-    def __pre_train(self):
-        os.makedirs("checkpoint", exist_ok=True)
+    def __load_parameters(self):
         if self.init_model_path is not None:
             if os.path.exists(self.init_model_path):
-                self.console_out.write("[INFO] load model parameters.")
+                self.console_out.write("[INFO] load model parameters.\n")
                 model_parameters = torch.load(self.init_model_path, map_location=self.device)
                 self.model.load_state_dict(model_parameters)
             else:
-                self.console_out.write("[INFO] model parameters not exists.")
+                self.console_out.write("[INFO] model parameters not exists.\n")
         if self.init_optim_path is not None:
             if os.path.exists(self.init_optim_path):
-                self.console_out.write("[INFO] load optim parameters.")
+                self.console_out.write("[INFO] load optim parameters.\n")
                 optim_parameters = torch.load(self.init_optim_path, map_location=self.device)
                 self.optimizer.load_state_dict(optim_parameters)
             else:
-                self.console_out.write("[INFO] optim parameters not exists.")
+                self.console_out.write("[INFO] optim parameters not exists.\n")
+
+    def __pre_train(self):
+        os.makedirs("checkpoint", exist_ok=True)
+        self.__load_parameters()
         self.model = self.model.to(self.device)
 
     def __train(self):
