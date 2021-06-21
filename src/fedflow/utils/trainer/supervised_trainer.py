@@ -179,6 +179,7 @@ class SupervisedTrainer(object):
         """
         if dataloader is None:
             dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+        self.model = self.model.to(self.device)
         with torch.no_grad():
             loss, correct, total = self._epoch_train(dataloader)
         return loss, correct, total

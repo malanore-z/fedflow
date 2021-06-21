@@ -16,7 +16,7 @@ class SplitTask(Task):
 
     def load(self) -> None:
         for i in range(10):
-            img_names = os.path.join(CIFAR_ROOT, str(i))
+            img_names = os.listdir(os.path.join(CIFAR_ROOT, str(i)))
             data = [(os.path.join(str(i), img_name), i) for img_name in img_names]
             random.shuffle(data)
             number = len(img_names) // self.nsamples

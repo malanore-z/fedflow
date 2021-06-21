@@ -39,5 +39,13 @@ class TrainTask(Task):
                                          device=device,
                                          init_model_path=pre_model_path,
                                          console_out="console.out")
+
+        _, correct, total = self.trainer.test(self.dataset)
+        ret = {
+            "init_acc": correct / total
+        }
+
         self.trainer.mount_dataset(self.dataset)
-        return self.trainer.train()
+
+        ret.update(self.trainer.train())
+        return ret
