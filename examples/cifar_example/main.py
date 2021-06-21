@@ -1,3 +1,12 @@
+try:
+    import fedflow
+except:
+    import os
+    import sys
+    root_dir = os.path.abspath(os.path.dirname(__file__))
+    root_dir = os.path.dirname(os.path.dirname(root_dir))
+    fedflow_dir = os.path.join(root_dir, "src")
+    sys.path.insert(0, fedflow_dir)
 
 from fedflow import FedFlow, TaskGroup
 
