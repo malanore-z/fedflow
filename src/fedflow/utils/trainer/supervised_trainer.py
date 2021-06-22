@@ -186,6 +186,8 @@ class SupervisedTrainer(object):
         else:
             if os.path.exists(init_model_path):
                 self.console_out.write("[INFO] load model parameters.\n")
+                model_parameters = torch.load(init_model_path, map_location=self.device)
+                self.model.load_state_dict(model_parameters)
             else:
                 self.console_out.write("[INFO] model parameters not exists.\n")
 
