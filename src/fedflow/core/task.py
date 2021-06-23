@@ -77,6 +77,8 @@ class Task(object):
         self.load_time = -1
         self.train_time = -1
 
+        self.result = {}
+
         self.__process = None
         self.__pipe = None
         self.__mq = None
@@ -293,6 +295,9 @@ class Task(object):
             self.train_time = int(1000 * (time.time() - start_time))
             if type(data) != dict:
                 data = {}
+
+            self.__send_message("set_result", data)
+
             data["load_time"] = self.load_time
             data["train_time"] = self.train_time
             self.__update_status(TaskStatus.FINISHED, data)

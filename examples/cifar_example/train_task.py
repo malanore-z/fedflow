@@ -8,7 +8,7 @@ from torch.optim import SGD
 from torch.optim.lr_scheduler import MultiStepLR
 
 from cifar_dataset import CifarDataset
-from lenet5 import LeNet5
+from cifar_net import CifarNet
 
 
 class TrainTask(Task):
@@ -19,8 +19,8 @@ class TrainTask(Task):
         self.aggregate_task = aggregate_task
 
     def load(self) -> None:
-        self.model = LeNet5()
-        self.optimizer = SGD(self.model.parameters(), lr=0.05)
+        self.model = CifarNet()
+        self.optimizer = SGD(self.model.parameters(), lr=0.001, momentum=0.9)
         self.lr_scheduler = MultiStepLR(self.optimizer, [10, 30, 60, 90])
         self.criterion = nn.CrossEntropyLoss()
         # Load dataset

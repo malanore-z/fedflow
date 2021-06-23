@@ -7,7 +7,7 @@ from fedflow import Task
 from fedflow.utils.trainer import SupervisedTrainer
 
 from cifar_dataset import CifarDataset
-from lenet5 import LeNet5
+from cifar_net import CifarNet
 
 
 class AggregateTask(Task):
@@ -39,7 +39,7 @@ class AggregateTask(Task):
 
     def test(self, device) -> dict:
         ret = {}
-        model = LeNet5()
+        model = CifarNet()
         criterion = nn.CrossEntropyLoss()
 
         trainer = SupervisedTrainer(model, None, criterion, device=device)

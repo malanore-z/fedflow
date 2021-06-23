@@ -59,6 +59,9 @@ class TaskHandler(Handler):
             status = data.pop("status")
             self.main_logger.info("{%s} receive update status{%s} signal", task.task_id, status.name)
             self.handle_status(task, status, data)
+        elif cmd == "set_result":
+            task = self.group.get_task(source)
+            task.result = data.copy()
 
     def handle_status(self, task: Task, status: TaskStatus, data: dict) -> None:
         """
