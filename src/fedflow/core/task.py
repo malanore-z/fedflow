@@ -69,7 +69,7 @@ class Task(object):
         self.task_id = task_id if task_id is not None else str(uuid.uuid4())
         self.estimate_memory = estimate_memory
         self.estimate_cuda_memory = estimate_cuda_memory
-        self.__device = device
+        self.device = device
         self.load_numbers = 0
         self.train_numbers = 0
 
@@ -83,10 +83,6 @@ class Task(object):
         self.__pipe = None
         self.__mq = None
         self.__status = TaskStatus.INIT
-
-    @property
-    def device(self) -> str:
-        return self.__device
 
     @property
     def workdir(self) -> str:
