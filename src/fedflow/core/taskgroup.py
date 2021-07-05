@@ -45,7 +45,7 @@ class TaskGroup(object):
         self.__group_name = group_name
         self.estimate_memory = estimate_memory
         self.estimate_cuda_memory = estimate_cuda_memory
-        self.device = device
+        self.__device = device
         self.auto_adjust_memory = self.estimate_memory is None
         self.auto_adjust_cuda_memory = self.estimate_cuda_memory is None
         if not Config.get_property("scheduler.auto-adjust"):
@@ -64,6 +64,10 @@ class TaskGroup(object):
         self.result = {}
 
         self.workdir = None
+
+    @property
+    def device(self) -> str:
+        return self.__device
 
     @property
     def group_name(self) -> str:
