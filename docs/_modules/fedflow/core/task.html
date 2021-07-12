@@ -249,6 +249,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">train_time</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">__process</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__pipe</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__mq</span> <span class="o">=</span> <span class="kc">None</span>
@@ -465,6 +467,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">train_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__send_message</span><span class="p">(</span><span class="s2">&quot;set_result&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;load_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_time</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;train_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_time</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__update_status</span><span class="p">(</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">FINISHED</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>

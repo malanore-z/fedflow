@@ -217,7 +217,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__group_name</span> <span class="o">=</span> <span class="n">group_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimate_memory</span> <span class="o">=</span> <span class="n">estimate_memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">estimate_cuda_memory</span> <span class="o">=</span> <span class="n">estimate_cuda_memory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__device</span> <span class="o">=</span> <span class="n">device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_adjust_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_memory</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_adjust_cuda_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_cuda_memory</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">Config</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s2">&quot;scheduler.auto-adjust&quot;</span><span class="p">):</span>
@@ -236,6 +236,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__device</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">group_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

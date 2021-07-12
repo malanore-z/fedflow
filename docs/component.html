@@ -181,16 +181,160 @@
 <h1>组件<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="task">
 <h2>Task<a class="headerlink" href="#task" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p>属性</p></li>
-<li><p>方法</p></li>
+<ol class="arabic">
+<li><p>属性</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_id</span></code></p>
+<blockquote>
+<div><p>每个task有一个同任务组内唯一id， 根据配置参数的不同，在不同的任务组可能存在相同id。 <code class="docutils literal notranslate"><span class="pre">task_id</span></code> 会被作为task工作目录名，因此不能使用路径不允许的字符。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device</span></code></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">Task</span></code> 有一个 <code class="docutils literal notranslate"><span class="pre">device</span></code> 属性，用于指定模型训练使用的显卡， 由Fedflow在运行中动态修改值，在定义 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 子类时，直接使用即可。</p>
+<p><code class="docutils literal notranslate"><span class="pre">device</span></code> 被初始化为 <code class="docutils literal notranslate"><span class="pre">None</span></code> ， 在调用 <code class="docutils literal notranslate"><span class="pre">train</span></code> 方法前， <code class="docutils literal notranslate"><span class="pre">device</span></code> 被赋值为Fedflow为此任务分配的显卡对应设备字符串。</p>
+<p>用户可以使用一个字符串指定任务只能使用某个显卡设备。指定显卡设备只能在构造函数中传入字符串， 构造 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 实例不能再修改。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workdir</span></code></p>
+<blockquote>
+<div><p>每个任务有其独立的工作目录， 因此在 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 方法中不应该使用根目录的相对目录，可能会产生未知错误。 <code class="docutils literal notranslate"><span class="pre">workdir</span></code> 被初始化为 <code class="docutils literal notranslate"><span class="pre">None</span></code>, 在 <code class="docutils literal notranslate"><span class="pre">start</span></code> 方法被调用时，
+<code class="docutils literal notranslate"><span class="pre">workdir</span></code> 被赋值为工作目录的绝对路径。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">result</span></code></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">train</span></code> 方法会返回一个字典， 字典的值被保存在 <code class="docutils literal notranslate"><span class="pre">result</span></code> 中， 用于在任务运行完后从中获取结果。</p>
+<p>因为每个任务在单独的子进程中运行，用户不应当通过设置对象属性的方式保留任务运行结果，此种方法的数据不会被传回主进程。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">status</span></code> 属性记录了任务的当前状态， <code class="docutils literal notranslate"><span class="pre">status</span></code> 是 <code class="docutils literal notranslate"><span class="pre">TaskStatus</span></code> 枚举类的实例。</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>方法</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">start(self)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>启动任务子进程。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_load(self)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>开始加载数据集。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_train(self,</span> <span class="pre">device:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>开始训练。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_alive(self)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code></p>
+<blockquote>
+<div><p>任务子进程是否在运行。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exit(self)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>退出任务子进程。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load(self)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>抽象方法，用户定义 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 子类中需要实现此方法。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">load</span></code> 方法中， 执行数据集加载等任务， 为了防止Fedflow占用过多内存， 用户应该尽可能保证在 <code class="docutils literal notranslate"><span class="pre">load</span></code> 方法执行完之后， <code class="docutils literal notranslate"><span class="pre">Task</span></code> 所占用内存基本不再增长。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">load</span></code> 方法中， 因为 <code class="docutils literal notranslate"><span class="pre">device</span></code> 属性尚未被正确赋值， 因此不能在此方法中执行需要使用显卡的代码。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train(self,</span> <span class="pre">device:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">dict</span></code></p>
+<blockquote>
+<div><p>抽象方法，用户定义 <code class="docutils literal notranslate"><span class="pre">Task</span></code> 子类中需要实现此方法。</p>
+<p>在 <code class="docutils literal notranslate"><span class="pre">train</span></code> 方法中, 执行模型训练过程， 在此方法被调用前， <code class="docutils literal notranslate"><span class="pre">device</span></code> 属性被正确赋值，可以使用 <code class="docutils literal notranslate"><span class="pre">device</span></code> 属性指定代码要运行在哪个显卡。</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
 </ol>
 </div>
 <div class="section" id="taskgroup">
 <h2>TaskGroup<a class="headerlink" href="#taskgroup" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p>属性</p></li>
-<li><p>方法</p></li>
+<ol class="arabic">
+<li><p>属性</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p>
+<blockquote>
+<div><p>任务组执行顺序，由Fedflow决定，用户不应该手动修改此属性。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">group_name</span></code></p>
+<blockquote>
+<div><p>用户可以使用一个有意义的字符串作为任务组名， 如果未指定， 则使用 <code class="docutils literal notranslate"><span class="pre">group-{{index}}</span></code> 作为默认任务组名。</p>
+<p><code class="docutils literal notranslate"><span class="pre">group_name</span></code> 被作为任务组文件系统路径使用，因此不能使用文件路径不允许的字符。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device</span></code></p>
+<blockquote>
+<div><p>用户可以使用一个字符串指定任务组内所有任务只能使用某个显卡设备。</p>
+<p>指定显卡设备只能在构造函数中传入字符串， 构造 <code class="docutils literal notranslate"><span class="pre">TaskGroup</span></code> 实例不能再修改。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workdir</span></code></p>
+<blockquote>
+<div><p>每个任务组有一个独立的工作空间， 在任务组开始被调度时， <code class="docutils literal notranslate"><span class="pre">workdir</span></code> 属性被赋值为工作目录的绝对路径。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">result</span></code></p>
+<blockquote>
+<div><p>任务组内任务执行结果被存在 <code class="docutils literal notranslate"><span class="pre">result</span></code> 中， 用于生成任务组运行报告。</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>方法</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_task(self,</span> <span class="pre">task:</span> <span class="pre">Task)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>向任务组内添加一个任务。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_task(self,</span> <span class="pre">task_id:</span> <span class="pre">Union[int,</span> <span class="pre">str])</span> <span class="pre">-&gt;</span> <span class="pre">Union[Task,</span> <span class="pre">None]</span></code></p>
+<blockquote>
+<div><p>根据id从任务组内获取任务。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_finish(self,</span> <span class="pre">task_id:</span> <span class="pre">Union[int,</span> <span class="pre">str],</span> <span class="pre">data=None)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>向任务组报告某个任务运行成功， 并记录运行结果。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">report_exception(self,</span> <span class="pre">task_id:</span> <span class="pre">Union[int,</span> <span class="pre">str],</span> <span class="pre">stage:</span> <span class="pre">str,</span> <span class="pre">message:</span> <span class="pre">str)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p>
+<blockquote>
+<div><p>向任务组报告某个任务运行失败， 并记录异常信息。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">finished(self)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code></p>
+<blockquote>
+<div><p>任务组内所有任务是否都运行结束（包括成功和失败）。</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">retrieve_task(self,</span> <span class="pre">status)</span> <span class="pre">-&gt;</span> <span class="pre">Union[Task,</span> <span class="pre">None]</span></code></p>
+<blockquote>
+<div><p>从任务组内随机获取一个指定状态的任务。</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
 </ol>
 </div>
 </div>
