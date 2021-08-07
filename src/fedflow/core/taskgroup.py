@@ -141,16 +141,17 @@ class TaskGroup(object):
         self.success_number += 1
         if data is None:
             data = {}
-        train_acc = data.pop("train_acc") if "train_acc" in data else -1
-        val_acc = data.pop("val_acc") if "val_acc" in data else -1
-        load_time = data.pop("load_time") if "load_time" in data else -1
-        train_time = data.pop("train_time") if "train_time" in data else -1
+        load_time = data["load_time"] if "load_time" in data else -1
+        train_time = data["train_time"] if "train_time" in data else -1
+        real_data = data["data"] if "data" in data else {}
+        train_acc = real_data.pop("train_acc") if "train_acc" in data else -1
+        val_acc = real_data.pop("val_acc") if "val_acc" in data else -1
         res = {
             "type": "success",
             "data": {
                 "train_acc": "%.2f%%" % (100 * train_acc) if train_acc != -1 else "-",
                 "val_acc": "%.2f%%" % (100 * val_acc) if val_acc != -1 else "-",
-                "data": json.dumps(data),
+                "data": json.dumps(real_data),
                 "load_time": self.__time_format(load_time),
                 "train_time": self.__time_format(train_time)
             }

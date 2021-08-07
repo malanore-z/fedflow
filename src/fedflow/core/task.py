@@ -77,12 +77,15 @@ class Task(object):
         self.load_time = -1
         self.train_time = -1
 
+        self.items = {}
         self.result = {}
 
         self.__process = None
         self.__pipe = None
         self.__mq = None
         self.__status = TaskStatus.INIT
+
+        self.__main_pid = os.getpid()
 
     @property
     def workdir(self) -> str:
@@ -126,6 +129,9 @@ class Task(object):
         except:
             s = TaskStatus.UNKNOWN
         self.__status = s
+
+    def get_item(self, key):
+        return self.items.get(key)
 
     # ======================================================================
     # ------------------------ main process methods ------------------------
@@ -221,6 +227,15 @@ class Task(object):
         os.chdir(self.__workdir)
         self.__listen()
 
+    def set_item(self, key, value):
+        if os.getpid() == self.__main_pid:
+            raise ValueError("You cannot call this method in main process.")
+        self.items[key] = value
+        self.__send_message("set_item", {
+            "key": key,
+            "value": value
+        })
+
     def __listen(self) -> None:
         """
         listen command from main process
@@ -294,13 +309,17 @@ class Task(object):
             data = self.train(self.device)
             self.train_time = int(1000 * (time.time() - start_time))
             if type(data) != dict:
+                self.sub_logger.warning("the train method returns illegal data(the data must be a dict)")
                 data = {}
 
             self.__send_message("set_result", data)
 
-            data["load_time"] = self.load_time
-            data["train_time"] = self.train_time
-            self.__update_status(TaskStatus.FINISHED, data)
+            send_data = {
+                "load_time": self.load_time,
+                "train_time": self.train_time,
+                "data": data
+            }
+            self.__update_status(TaskStatus.FINISHED, send_data)
             self.sub_logger.info("{%s} train successful, used %dms", self.task_id, self.train_time)
         except Exception as e:
             if type(e) == RuntimeError and len(e.args) > 0 and "CUDA out of memory" in e.args[0]:

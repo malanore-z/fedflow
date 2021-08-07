@@ -52,7 +52,8 @@ class SupervisedTrainer(object):
                  epoch_action=None,
                  checkpoint_interval=10,
                  device="cuda:0",
-                 console_out=None):
+                 console_out=None,
+                 result_dir="."):
         """
         Construct a trainer.
 
@@ -84,6 +85,7 @@ class SupervisedTrainer(object):
             if 0.
         :param device: the device used for training.
         :param console_out: redirect print.
+        :param result_dir: the directory where the results are saved.
         """
         super(SupervisedTrainer, self).__init__()
         self.model = model
@@ -110,6 +112,7 @@ class SupervisedTrainer(object):
                 self.console_out = open(console_out, "w")
             else:
                 self.console_out = console_out
+        self.result_dir = result_dir
 
         self.start_time = int(time.time())
         self.history = self.History([], [], [], [], [])
@@ -214,7 +217,8 @@ class SupervisedTrainer(object):
                 self.console_out.write("[INFO] optim parameters not exists.\n")
 
     def __pre_train(self):
-        os.makedirs("checkpoint", exist_ok=True)
+        os.makedirs(self.result_dir, exist_ok=True)
+        os.makedirs(os.path.join(self.result_dir, "checkpoint"), exist_ok=True)
         self.__load_parameters()
         self.model = self.model.to(self.device)
 
@@ -248,11 +252,11 @@ class SupervisedTrainer(object):
                 self.lr_scheduler.step()
 
             if self.checkpoint_interval > 0 and (e + 1) % self.checkpoint_interval == 0:
-                torch.save(self.model.state_dict(), "checkpoint/parameter-%d.checkpoint" % (e + 1))
-                torch.save(self.optimizer.state_dict(), "checkpoint/oprtimizer-%d.checkpoint" % (e + 1))
+                torch.save(self.model.state_dict(), self._checkpoint_parameter_path(e + 1))
+                torch.save(self.optimizer.state_dict(),  self._checkpoint_optimizer_path(e + 1))
 
     def __post_train(self):
-        with open("history.json", "w") as f:
+        with open(self._history_path(), "w") as f:
             f.write(json.dumps({
                 "train_loss": self.history.train_loss,
                 "val_loss": self.history.val_loss,
@@ -260,9 +264,27 @@ class SupervisedTrainer(object):
                 "val_acc": self.history.val_acc,
                 "lr": self.history.lr
             }, indent=4))
-        torch.save(self.model.state_dict(), "parameter.pth")
-        torch.save(self.optimizer.state_dict(), "optimizer.pth")
+        torch.save(self.model.state_dict(), self._parameter_path())
+        torch.save(self.optimizer.state_dict(), self._optimizer_path())
         self.__draw_png()
+
+    def _checkpoint_parameter_path(self, idx):
+        return os.path.join(self.result_dir, "checkpoint", "parameter-%d.checkpoint" % idx)
+
+    def _checkpoint_optimizer_path(self, idx):
+        return os.path.join(self.result_dir, "checkpoint", "optimizer-%d.checkpoint" % idx)
+
+    def _parameter_path(self):
+        return os.path.join(self.result_dir, "parameter.pth")
+
+    def _optimizer_path(self):
+        return os.path.join(self.result_dir, "optimizer.pth")
+
+    def _history_path(self):
+        return os.path.join(self.result_dir, "history.json")
+
+    def _graph_path(self):
+        return os.path.join(self.result_dir, "history.png")
 
     def _epoch_train(self, dataloader):
         correct = 0
@@ -331,4 +353,4 @@ class SupervisedTrainer(object):
         plt.plot(xdata, self.history.lr)
         plt.grid()
 
-        plt.savefig("history.png")
+        plt.savefig(self._graph_path())

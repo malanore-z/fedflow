@@ -54,14 +54,15 @@ class TaskHandler(Handler):
         :param data: the payload data.
         :return:
         """
+        task = self.group.get_task(source)
         if cmd == "update_status":
-            task = self.group.get_task(source)
             status = data.pop("status")
             self.main_logger.info("{%s} receive update status{%s} signal", task.task_id, status.name)
             self.handle_status(task, status, data)
         elif cmd == "set_result":
-            task = self.group.get_task(source)
             task.result = data.copy()
+        elif cmd == "set_item":
+            task.items[data["key"]] = data["value"]
 
     def handle_status(self, task: Task, status: TaskStatus, data: dict) -> None:
         """
