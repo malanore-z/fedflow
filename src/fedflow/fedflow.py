@@ -15,7 +15,7 @@ from fedflow.config import Config
 from fedflow.context import WorkDirContext
 from fedflow.core.message import MessageListener
 from fedflow.core.scheduler import GroupScheduler
-from fedflow.core.taskgroup import TaskGroup
+from fedflow.core.taskgroup import Task, TaskGroup
 
 
 class FedFlow(object):
@@ -29,9 +29,11 @@ class FedFlow(object):
     def __init__(self):
         super(FedFlow, self).__init__()
         self.in_working = False
+        self.__pre_workdir = None
 
     def __enter__(self):
         self.open()
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
@@ -40,12 +42,14 @@ class FedFlow(object):
         self.in_working = True
         workdir = Config.get_property("workdir")
         os.makedirs(workdir, exist_ok=True)
+        self.__pre_workdir = os.path.abspath(os.curdir)
         os.chdir(workdir)
 
         MessageListener.start()
 
     def close(self):
         MessageListener.stop()
+        os.chdir(self.__pre_workdir)
         self.in_working = False
 
     def execute(self, group: TaskGroup) -> None:
@@ -57,6 +61,16 @@ class FedFlow(object):
                 group.workdir = os.path.abspath(".")
                 GroupScheduler.schedule(group)
         else:
+            GroupScheduler.schedule(group)
+
+    def execute_task(self, task: Task):
+        if not self.in_working:
+            raise ValueError("Please use 'with Fedflow()'")
+        group = TaskGroup("default")
+        group.add_task(task)
+        os.makedirs(group.group_name, exist_ok=True)
+        with WorkDirContext(group.group_name):
+            group.workdir = os.path.abspath(".")
             GroupScheduler.schedule(group)
 
     @classmethod
