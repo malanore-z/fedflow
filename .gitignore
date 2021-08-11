@@ -39,6 +39,7 @@ Thumbs.db
 # IDE
 .idea
 .gradle
+.vscode
 
 # Python
 .venv/
