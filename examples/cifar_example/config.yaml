@@ -9,7 +9,7 @@
 # By default, the workdir is current directory.
 workdir: 'res'
 
-debug: true
+debug: false
 
 # You can specify a GPU selection priority, fedflow will use the GPU in the order specified by
 #   the priority.
@@ -31,12 +31,12 @@ task:
   allow-duplicate-id: true
 
 scheduler:  # some task scheduler parameters
-  default-memory: '3GB'
+  default-memory: '2GB'
   default-cuda-memory: '2GB'
   auto-adjust: false
   max-waiting: 10
   max-process: 20
-  interval: 20  # seconds
+  interval: 3  # seconds
   load-nretry: 3
   train-nretry: 3
 

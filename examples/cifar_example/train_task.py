@@ -13,10 +13,10 @@ from cifar_net import CifarNet
 
 class TrainTask(Task):
 
-    def __init__(self, task_id, split_task: Task, aggregate_task: Task):
+    def __init__(self, task_id, sample_dir: Task, aggregate_dir: Task = None):
         super(TrainTask, self).__init__(task_id=str(task_id))
-        self.split_task = split_task
-        self.aggregate_task = aggregate_task
+        self.sample_dir = sample_dir
+        self.aggregate_dir = aggregate_dir
 
     def load(self) -> None:
         self.model = CifarNet()
@@ -24,18 +24,18 @@ class TrainTask(Task):
         self.lr_scheduler = MultiStepLR(self.optimizer, [10, 30, 60, 90])
         self.criterion = nn.CrossEntropyLoss()
         # Load dataset
-        sample_path = os.path.join(self.split_task.workdir, "sample-%s.csv" % self.task_id)
+        sample_path = os.path.join(self.sample_dir, "sample-%s.csv" % self.task_id)
         df = pd.read_csv(sample_path, header=None)
         data = df.values.tolist()
         self.dataset = CifarDataset(data)
 
     def train(self, device: str) -> dict:
-        if self.aggregate_task is not None:
-            pre_model_path = os.path.join(self.aggregate_task.workdir, "aggregate.pth")
+        if self.aggregate_dir is not None:
+            pre_model_path = os.path.join(self.aggregate_dir, "aggregate.pth")
         else:
             pre_model_path = None
         self.trainer = SupervisedTrainer(self.model, self.optimizer, self.criterion, self.lr_scheduler,
-                                         epoch=100,
+                                         epoch=10,
                                          device=device,
                                          init_model_path=pre_model_path,
                                          console_out="console.out")

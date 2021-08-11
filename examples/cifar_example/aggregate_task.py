@@ -12,9 +12,9 @@ from cifar_net import CifarNet
 
 class AggregateTask(Task):
 
-    def __init__(self, split_task, tasks):
+    def __init__(self, sample_dir, tasks):
         super(AggregateTask, self).__init__()
-        self.split_task = split_task
+        self.sample_dir = sample_dir
         self.tasks = tasks
         self.parameters = []
 
@@ -47,7 +47,7 @@ class AggregateTask(Task):
         all_correct, all_total = 0, 0
 
         for i in range(10):
-            sample_path = os.path.join(self.split_task.workdir, "sample-%d.csv" % i)
+            sample_path = os.path.join(self.sample_dir, "sample-%d.csv" % i)
             df = pd.read_csv(sample_path, header=None)
             data = df.values.tolist()
             dataset = CifarDataset(data)
@@ -59,5 +59,7 @@ class AggregateTask(Task):
             all_total += total
 
         ret["ALL"] = "%.2f%%(%d/%d)" % (100 * all_correct / all_total, all_correct, all_total)
+
+        self.set_item("acc", all_correct / all_total)
 
         return ret

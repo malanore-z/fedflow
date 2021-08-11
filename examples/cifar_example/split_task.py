@@ -29,7 +29,7 @@ class SplitTask(Task):
 
     def train(self, device: str) -> dict:
         # Nothing to do
-        pass
+        return {}
 
 
 if __name__ == "__main__":
