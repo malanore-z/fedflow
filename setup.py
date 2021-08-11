@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="fedflow",
-    version="0.2.0b2",
+    version="0.2.0",
     author="malanore",
     author_email="malanore.z@gmail.com",
     description="auto-scheduler for pytorch task.",
