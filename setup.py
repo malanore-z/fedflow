@@ -19,7 +19,7 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: POSIX",
+        "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
     package_data={'': ['resources/*']},
