@@ -106,3 +106,14 @@ if __name__ == "__main__":
 
 ```
 
+## Bugs
++ `task.device` is not used.
++ `task.result` works not well.
++ `SupervisedTraienr#_epoch_train` need be updated.
+    + `criterion` should not be used in test progress 
++ cannot handle 'space not left' exception
+
+## Features
++ add subprocess tracker
++ add GPUs load balancing
++ add methods to kill specified subprocess/task
