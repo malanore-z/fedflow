@@ -188,7 +188,7 @@ class GroupScheduler(object):
                         require_cuda_memory = task.estimate_cuda_memory
                         if require_cuda_memory is None:
                             require_cuda_memory = group.estimate_cuda_memory
-                        device_id = cls.assign_cuda(require_cuda_memory)
+                        device_id = cls.assign_cuda(require_cuda_memory, task.device)
                         if device_id >= 0:
                             device = "cuda:%d" % device_id
                             cls.logger.info("task{%s} start train in %s", task.task_id, device)

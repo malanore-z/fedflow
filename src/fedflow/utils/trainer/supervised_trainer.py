@@ -196,7 +196,7 @@ class SupervisedTrainer(object):
 
         self.model = self.model.to(self.device)
         with torch.no_grad():
-            loss, correct, total = self._epoch_train(dataloader)
+            loss, correct, total = self._epoch_update(dataloader)
         self.console_out.write("[INFO] Test ended.")
         return loss, correct, total
 
@@ -224,10 +224,10 @@ class SupervisedTrainer(object):
 
     def __train(self):
         for e in range(self.epoch):
-            t_loss, t_correct, t_total = self._epoch_train(self.train_dataloader)
+            t_loss, t_correct, t_total = self._epoch_update(self.train_dataloader)
             t_acc = t_correct / t_total
             with torch.no_grad():
-                v_loss, v_correct, v_total = self._epoch_train(self.val_dataloader)
+                v_loss, v_correct, v_total = self._epoch_update(self.val_dataloader)
                 v_acc = v_correct / v_total
             lr = self.optimizer.param_groups[0]["lr"]
             self.console_out.write("[%s] EPOCH %d of %d\n" %
@@ -286,14 +286,15 @@ class SupervisedTrainer(object):
     def _graph_path(self):
         return os.path.join(self.result_dir, "history.png")
 
-    def _epoch_train(self, dataloader):
+    def _epoch_update(self, dataloader):
         correct = 0
         total = 0
         loss_total = 0
         iter_num = 0
+        loss = None
 
         for i, data in enumerate(dataloader):
-            inputs, labels = data
+            inputs, labels = data[0], data[1]
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
 
@@ -301,13 +302,16 @@ class SupervisedTrainer(object):
                 self.optimizer.zero_grad()
 
             outputs = self.model(inputs)
-            loss = self.criterion(outputs, labels)
+
+            if torch.is_grad_enabled():
+                loss = self.criterion(outputs, labels)
 
             if torch.is_grad_enabled():
                 loss.backward()
                 self.optimizer.step()
 
-            loss_total += loss.item()
+                loss_total += loss.item()
+
             iter_num += 1
 
             _, pred = torch.max(outputs, 1)
