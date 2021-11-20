@@ -30,7 +30,8 @@ setuptools.setup(
         "psutil",
         "PyYAML",
         "numpy",
-        "matplotlib"
+        "matplotlib",
+        "pynvml"
     ],
     extras_requires={
         "pytorch": [

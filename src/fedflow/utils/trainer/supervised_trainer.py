@@ -9,6 +9,7 @@ __all__ = [
     "SupervisedTrainer"
 ]
 
+import copy
 import os
 import json
 import sys
@@ -183,6 +184,8 @@ class SupervisedTrainer(object):
         self.console_out.write("[INFO] Test started.")
         if dataloader is None:
             dataloader = DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
+
+        model_copy = copy.deepcopy(self.model)
 
         if init_model_path is None:
             self.console_out.write("[WARN] test model has no pre-trained parameters.")
