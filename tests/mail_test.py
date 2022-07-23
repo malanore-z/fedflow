@@ -2,7 +2,7 @@ import unittest
 
 from email.mime.text import MIMEText
 
-from fedflow.mail.send_mail import send_mail
+from fedflow.mail import send_mail
 
 
 class MailTestCase(unittest.TestCase):

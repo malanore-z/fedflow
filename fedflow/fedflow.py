@@ -58,7 +58,7 @@ class FedFlow(object):
         if Config.get_property("task.directory-grouping"):
             os.makedirs(group.group_name, exist_ok=True)
             with WorkDirContext(group.group_name):
-                group.workdir = os.path.abspath(".")
+                group.workdir = os.path.abspath("")
                 GroupScheduler.schedule(group)
         else:
             GroupScheduler.schedule(group)
@@ -70,7 +70,7 @@ class FedFlow(object):
         group.add_task(task)
         os.makedirs(group.group_name, exist_ok=True)
         with WorkDirContext(group.group_name):
-            group.workdir = os.path.abspath(".")
+            group.workdir = os.path.abspath("")
             GroupScheduler.schedule(group)
 
     @classmethod
@@ -102,7 +102,7 @@ class FedFlow(object):
             if Config.get_property("task.directory-grouping"):
                 os.makedirs(g.group_name, exist_ok=True)
                 with WorkDirContext(g.group_name):
-                    g.workdir = os.path.abspath(".")
+                    g.workdir = os.path.abspath("")
                     GroupScheduler.schedule(g)
             else:
                 GroupScheduler.schedule(g)

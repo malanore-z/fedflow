@@ -13,3 +13,5 @@ sphinx==4.0.2
 sphinx-rtd-theme==0.5.2
 recommonmark==0.7.1
 pynvml==11.0.0
+zcommons==0.1.0
+traits

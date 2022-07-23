@@ -11,7 +11,6 @@ except:
 import json
 import os
 import shutil
-import sys
 
 import matplotlib.pyplot as plt
 from fedflow import FedFlow, TaskGroup

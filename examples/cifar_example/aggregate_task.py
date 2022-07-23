@@ -4,7 +4,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 from fedflow import Task
-from fedflow.utils.trainer import SupervisedTrainer
+from fedflow.utils import SupervisedTrainer
 
 from cifar_dataset import CifarDataset
 from cifar_net import CifarNet

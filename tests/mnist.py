@@ -1,5 +1,3 @@
-import fedflow_test
-
 import os
 
 import torch.nn as nn
@@ -10,7 +8,7 @@ from torchvision.transforms import transforms
 
 from fedflow import Task, TaskGroup, FedFlow
 from fedflow.config import Config
-from fedflow.utils.trainer.supervised_trainer import SupervisedTrainer
+from fedflow.utils.trainer import SupervisedTrainer
 
 
 Config.set_property("debug", True)

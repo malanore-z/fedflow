@@ -16,6 +16,24 @@ import shutil
 import yaml
 
 
+class ResourceConfig(object):
+    
+    def __init__(self):
+        super(ResourceConfig, self).__init__()
+
+
+class TaskConfig(object):
+
+    def __init__(self):
+        pass
+
+
+class FedConfig(object):
+
+    def __init__(self, config: dict):
+        pass
+
+
 class Config(object):
 
     # Parameters that can be modified at run time

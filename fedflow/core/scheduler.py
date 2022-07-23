@@ -16,9 +16,12 @@ import logging
 import time
 from typing import Union
 
-import ngpuinfo
+try:
+    import ngpuinfo
+    from ngpuinfo import NGPUInfo
+except:
+    pass
 import psutil
-from ngpuinfo import NGPUInfo
 
 from fedflow.config import Config
 from fedflow.core.message import MessageListener, Handler

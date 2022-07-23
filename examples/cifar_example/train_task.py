@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import torch.nn as nn
 from fedflow import Task
-from fedflow.utils.trainer import SupervisedTrainer
+from fedflow.utils import SupervisedTrainer
 from torch.optim import SGD
 from torch.optim.lr_scheduler import MultiStepLR
 

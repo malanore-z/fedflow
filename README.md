@@ -21,12 +21,10 @@ from torchvision.transforms import transforms
 
 from fedflow import Task, TaskGroup, FedFlow
 from fedflow.config import Config
-from fedflow.utils.trainer.supervised_trainer import SupervisedTrainer
-
+from fedflow.utils import SupervisedTrainer
 
 Config.set_property("debug", True)
 Config.set_property("scheduler.interval", 2)
-
 
 datasets_path = os.path.join(os.path.abspath("."), "datasets")
 
@@ -70,9 +68,9 @@ class MnistTask(Task):
                                         download=True,
                                         train=False,
                                         transform=transforms.Compose([
-                                             transforms.ToTensor(),
-                                             transforms.Normalize((0.13066062,), (0.30810776,))
-                                         ]))
+                                            transforms.ToTensor(),
+                                            transforms.Normalize((0.13066062,), (0.30810776,))
+                                        ]))
         self.mnist_model = Net()
         self.mnist_optim = optim.SGD(self.mnist_model.parameters(), lr=0.01)
         self.criterion = nn.CrossEntropyLoss()
