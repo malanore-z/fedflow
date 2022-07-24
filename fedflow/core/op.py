@@ -2,6 +2,7 @@ __all__ = [
     "FedOp"
 ]
 
+import abc
 import logging
 from typing import Sequence
 
@@ -21,11 +22,11 @@ class FedOp(object):
         self.__graph.add_op(self, pre_ops)
 
     @property
-    def n_input_ports(self):
+    def n_in_ports(self):
         raise NotImplementedError("")
 
     @property
-    def n_output_ports(self):
+    def n_out_ports(self):
         raise NotImplementedError("")
 
     @property
@@ -36,11 +37,12 @@ class FedOp(object):
     def graph(self):
         return self.__graph
 
-    def run(self, inputs: Sequence[FedData]) -> Sequence[FedData]:
-        return []
+    @abc.abstractmethod
+    def execute(self, inputs: Sequence[FedData]) -> Sequence[FedData]:
+        raise NotImplementedError("")
 
     def __call__(self, inputs: Sequence[FedData]) -> Sequence[FedData]:
-        return self.run(inputs)
+        return self.execute(inputs)
 
     def __default_graph(self):
         from fedflow.core.graph import FedGraph
